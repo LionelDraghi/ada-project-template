@@ -81,6 +81,31 @@ semantics:
 A project deviates from these semantics only where the deviation is
 explicitly stated in its own `AGENTS.md`.
 
+## Standard project tree (shared)
+
+Every project follows this layout, stating its deviations in its own
+`AGENTS.md`:
+
+- root: `AGENTS.md`, `README.md`, `LICENSE`, `Makefile`, `alire.toml`,
+  `<project>.gpr`;
+- `docs/`: user documentation, with:
+  - `docs/changelog.md` — the changelog; its development section is
+    `[x.y.z-dev]`;
+  - `docs/features/` — the bbt scenario pages, the executable
+    documentation: a must-have;
+  - `docs/tests_results/` — the test results and badges, generated and
+    committed; the tests themselves are not (necessarily) there;
+  - `docs/dev/` — `development_workflow.md`,
+    `release_procedure.md` (parameters and project additions),
+    `design_discussions.md`, `fixme_index.md`;
+- `src/` — the sources, with the generated `src/Alire_config/`
+  version-controlled;
+- `tests/` — the bbt run directory; it may also host optional suites
+  (`sanity/`, `non_reg/`) and the unit tests;
+- `tools/` — the tool sub-projects, when any;
+- `.github/workflows/` — `build-test.yml` and `appimage.yml`: every
+  project publishes a continuous AppImage of its executable.
+
 ## Task triage (shared)
 
 When the user asks "what should we do now?" or "what is the priority
