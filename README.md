@@ -16,11 +16,12 @@ ada-project-template/
 
 ## How the projects use it
 
-Each project's `AGENTS.md` references this repository instead of
-duplicating it:
+Each project's `AGENTS.md` references this repository on GitHub
+instead of duplicating it:
 
-> The shared rules for Lionel's Ada projects live in
-> `../ada-project-template/AGENTS.template.md` and apply here in full.
+> The shared rules for Lionel's Ada projects live in the [reference
+> repository on GitHub](https://github.com/LionelDraghi/ada-project-template/blob/main/AGENTS.template.md)
+> and apply here in full.
 
 Each project's `docs/dev/release_procedure.md` gives the parameter
 values and the project-specific additions; the common procedure lives

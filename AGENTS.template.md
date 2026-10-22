@@ -9,8 +9,9 @@ that project.
 
 In a new project's `AGENTS.md`, start with:
 
-> The shared rules for Lionel's Ada projects live in
-> `../ada-project-template/AGENTS.template.md` and apply here in full.
+> The shared rules for Lionel's Ada projects live in the [reference
+> repository on GitHub](https://github.com/LionelDraghi/ada-project-template/blob/main/AGENTS.template.md)
+> and apply here in full.
 
 Then keep only the project-specific sections (build pointers, testing
 tools, domain rules, conditional readings). Do not copy the shared
