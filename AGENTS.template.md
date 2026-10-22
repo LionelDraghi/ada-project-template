@@ -92,11 +92,20 @@ Where the skills live:
   `~/.agents/skills/` (for instance
   `ln -s ~/prj/ada-project-template/skills/refactoring ~/.agents/skills/refactoring`),
   so that an update here applies everywhere.
-- Third-party skills (`ada-pro`, `gnatprove`, `code-review`,
-  `find-skills`) are installed from their GitHub sources with the
-  skills CLI (`npx skills`), and stay managed by it.
+- Third-party skills are installed from their GitHub sources with the
+  skills CLI (`npx skills`), and stay managed by it. The reference
+  sources are:
+  - `ada-pro`: https://github.com/RREE/Ada-Pro
+    (`npx skills add RREE/Ada-Pro`)
+  - `gnatprove`: https://github.com/adacore/skills
+    (`npx skills add adacore/skills --skill gnatprove`)
+  - `code-review`: https://github.com/mattpocock/skills
+    (`npx skills add mattpocock/skills --skill code-review`)
+  - `find-skills`: https://github.com/vercel-labs/skills
+    (`npx skills add vercel-labs/skills --skill find-skills`)
 - The **bbt skill** is referenced from GitHub, never copied here:
-  `npx skills add LionelDraghi/bbt --skill bbt-skill`. Load it before
+  `npx skills add LionelDraghi/bbt --skill bbt-skill`
+  (source: https://github.com/LionelDraghi/bbt). Load it before
   writing, converting or debugging bbt scenarios.
 
 ## Definition of done (shared)

@@ -36,8 +36,18 @@ ln -s ~/prj/ada-project-template/skills/refactoring ~/.agents/skills/refactoring
 ```
 
 Third-party skills are installed from their GitHub sources with the
-skills CLI (`npx skills`). The bbt skill is referenced from GitHub,
-never copied here: `npx skills add LionelDraghi/bbt --skill bbt-skill`.
+skills CLI (`npx skills`) and stay managed by it:
+
+| Skill | Online source |
+|---|---|
+| ada-pro | https://github.com/RREE/Ada-Pro |
+| gnatprove | https://github.com/adacore/skills |
+| code-review | https://github.com/mattpocock/skills |
+| find-skills | https://github.com/vercel-labs/skills |
+
+The bbt skill is referenced from GitHub, never copied here:
+`npx skills add LionelDraghi/bbt --skill bbt-skill`
+(source: https://github.com/LionelDraghi/bbt).
 
 Change here, apply everywhere: a fix to a shared rule, to the common
 release procedure, or to a locally-owned skill only needs one commit,
