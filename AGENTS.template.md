@@ -103,8 +103,10 @@ Every project follows this layout, stating its deviations in its own
 - `tests/` — the bbt run directory; it may also host optional suites
   (`sanity/`, `non_reg/`) and the unit tests;
 - `tools/` — the tool sub-projects, when any;
-- `.github/workflows/` — `build-test.yml` and `appimage.yml`: every
-  project publishes a continuous AppImage of its executable.
+- `.github/workflows/` — the build-and-test workflow
+  (`build-test.yml`), and `appimage.yml`, a continuous AppImage
+  workflow for every project that ships an executable; a library
+  publishes no AppImage.
 
 ## Task triage (shared)
 
