@@ -52,6 +52,33 @@ applies everywhere.
   gives the parameter values (changelog, validation command, remote,
   CI checks, ...) and the project-specific additions.
 
+## Build pointers (shared)
+
+Every project Makefile is self-documented: `make help` lists the
+targets with a short description, and is the documentation of record
+for project-specific targets. The standard targets and their
+semantics:
+
+- `make help`: list the targets.
+- `make build`: validation-mode build (`alr build --validation`);
+  warnings, including style ones, are errors.
+- `make release`: release-mode build (`alr build --release`) — a pure
+  build: it runs no test and installs nothing.
+- `make check`: run the project's test verification (the bbt scenario
+  suites, and the unit tests where present); it builds what it needs.
+- `make doc`: regenerate the generated documentation (fixme index,
+  cmd_line.md, badges, ...). The generated results are part of the
+  repository state, not published by the CI.
+- `make all`: build, the tools where the project has some, then check
+  and doc.
+- `make clean`: remove the build and test artifacts.
+- `make distclean`: remove everything that can be rebuilt, binaries
+  included.
+- `make install`: copy the binaries to `~/bin`.
+
+A project deviates from these semantics only where the deviation is
+explicitly stated in its own `AGENTS.md`.
+
 ## Task triage (shared)
 
 When the user asks "what should we do now?" or "what is the priority
@@ -111,7 +138,7 @@ Where the skills live:
 
 ## Definition of done (shared)
 
-Before considering a change complete, the project's build, test and
-check targets must pass (`make build`, `make test`, `make check`, and
-`make prove` where the project carries proofs). Never claim success
-without having run and read the corresponding commands.
+Before considering a change complete, the project's build and test
+targets must pass (`make build`, `make check`, and `make prove` where
+the project carries proofs). Never claim success without having run
+and read the corresponding commands.
