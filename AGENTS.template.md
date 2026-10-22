@@ -64,13 +64,15 @@ semantics:
   warnings, including style ones, are errors.
 - `make release`: release-mode build (`alr build --release`) — a pure
   build: it runs no test and installs nothing.
-- `make check`: run the project's test verification (the bbt scenario
-  suites, and the unit tests where present); it builds what it needs.
-- `make doc`: regenerate the generated documentation (fixme index,
-  cmd_line.md, badges, ...). The generated results are part of the
-  repository state, not published by the CI.
-- `make all`: build, the tools where the project has some, then check
-  and doc.
+- `make check`: run the project's tests — it depends on the tools and
+  on the executable. The executable may be the validation one or the
+  release one: the tests must pass with both.
+- `make doc`: regenerate the generated documentation (the fixme index
+  in `docs/dev/fixme_index.md`, cmd_line.md, badges, ...). The
+  generated results are part of the repository state, not published
+  by the CI.
+- `make all`: build, check and doc. Do not list the tools in `all`:
+  `check` already depends on them.
 - `make clean`: remove the build and test artifacts.
 - `make distclean`: remove everything that can be rebuilt, binaries
   included.
