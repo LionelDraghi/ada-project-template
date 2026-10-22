@@ -46,7 +46,10 @@ applies everywhere.
   follow `docs/dev/development_workflow.md`
   (TopoProof: `docs/dev/development.md`).
 - Release versioning, tagging, GitHub release, Alire publication:
-  follow `docs/dev/release_procedure.md`.
+  the **release procedure is common** and lives in this repository,
+  `release_procedure.md`. Each project's `docs/dev/release_procedure.md`
+  gives the parameter values (changelog, validation command, remote,
+  CI checks, ...) and the project-specific additions.
 
 ## Task triage (shared)
 
@@ -81,6 +84,20 @@ Load the matching skill before the corresponding work:
 - `gnatprove` for SPARK contracts, proofs, and proof campaigns;
 - `refactoring` when improving code structure or hunting bad smells;
 - `code-review` to review changes since a fixed point.
+
+Where the skills live:
+
+- Locally-owned skills live in this repository, in `skills/<name>/`.
+  Each machine installs them by symlinking the folder into
+  `~/.agents/skills/` (for instance
+  `ln -s ~/prj/ada-project-template/skills/refactoring ~/.agents/skills/refactoring`),
+  so that an update here applies everywhere.
+- Third-party skills (`ada-pro`, `gnatprove`, `code-review`,
+  `find-skills`) are installed from their GitHub sources with the
+  skills CLI (`npx skills`), and stay managed by it.
+- The **bbt skill** is referenced from GitHub, never copied here:
+  `npx skills add LionelDraghi/bbt --skill bbt-skill`. Load it before
+  writing, converting or debugging bbt scenarios.
 
 ## Definition of done (shared)
 
