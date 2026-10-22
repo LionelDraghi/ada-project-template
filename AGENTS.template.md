@@ -92,8 +92,7 @@ Every project follows this layout, stating its deviations in its own
 │                        AppImage workflow, when the project ships an
 │                        executable; a library publishes no AppImage
 ├── docs/
-│   ├── changelog.md     the changelog; its development section is
-│                        [x.y.z-dev]
+│   ├── changelog.md     the changelog
 │   ├── features/        the bbt scenario pages, the executable
 │                        documentation: a must-have
 │   ├── tests_results/   the test results and badges, generated and
