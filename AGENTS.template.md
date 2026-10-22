@@ -44,8 +44,7 @@ applies everywhere.
 ## Choose the right procedure (shared)
 
 - Development work, bug fixes, doc updates, tests, cleanup, review:
-  follow `docs/dev/development_workflow.md`
-  (TopoProof: `docs/dev/development.md`).
+  follow `docs/dev/development_workflow.md`.
 - Release versioning, tagging, GitHub release, Alire publication:
   the **release procedure is common** and lives in this repository,
   `release_procedure.md`. Each project's `docs/dev/release_procedure.md`
@@ -86,27 +85,31 @@ explicitly stated in its own `AGENTS.md`.
 Every project follows this layout, stating its deviations in its own
 `AGENTS.md`:
 
-- root: `AGENTS.md`, `README.md`, `LICENSE`, `Makefile`, `alire.toml`,
-  `<project>.gpr`;
-- `docs/`: user documentation, with:
-  - `docs/changelog.md` — the changelog; its development section is
-    `[x.y.z-dev]`;
-  - `docs/features/` — the bbt scenario pages, the executable
-    documentation: a must-have;
-  - `docs/tests_results/` — the test results and badges, generated and
-    committed; the tests themselves are not (necessarily) there;
-  - `docs/dev/` — `development_workflow.md`,
-    `release_procedure.md` (parameters and project additions),
-    `design_discussions.md`, `fixme_index.md`;
-- `src/` — the sources, with the generated `src/Alire_config/`
-  version-controlled;
-- `tests/` — the bbt run directory; it may also host optional suites
-  (`sanity/`, `non_reg/`) and the unit tests;
-- `tools/` — the tool sub-projects, when any;
-- `.github/workflows/` — the build-and-test workflow
-  (`build-test.yml`), and `appimage.yml`, a continuous AppImage
-  workflow for every project that ships an executable; a library
-  publishes no AppImage.
+```text
+<project>/
+├── AGENTS.md  README.md  LICENSE  Makefile  alire.toml  <project>.gpr
+├── .github/workflows/   build-test.yml; appimage.yml, a continuous
+│                        AppImage workflow, when the project ships an
+│                        executable; a library publishes no AppImage
+├── docs/
+│   ├── changelog.md     the changelog; its development section is
+│                        [x.y.z-dev]
+│   ├── features/        the bbt scenario pages, the executable
+│                        documentation: a must-have
+│   ├── tests_results/   the test results and badges, generated and
+│                        committed; the tests themselves are not
+│                        (necessarily) there
+│   └── dev/
+│       ├── development_workflow.md
+│       ├── release_procedure.md   parameters and project additions
+│       ├── design_discussions.md
+│       └── fixme_index.md
+├── src/                 the sources; the generated src/Alire_config/
+│                        is version-controlled
+├── tests/               the bbt run directory; may also host optional
+│                        suites (sanity/, non_reg/) and the unit tests
+└── tools/               the tool sub-projects, when any
+```
 
 ## Task triage (shared)
 
