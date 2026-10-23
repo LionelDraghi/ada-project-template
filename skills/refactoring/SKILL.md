@@ -1,213 +1,425 @@
 ---
 name: refactoring
-description: Use when the user wants to refactor, clean up, restructure, or simplify code, or asks to hunt "bad smells", "code smells", or technical debt. Covers smell detection, prioritization, behavior-preserving refactoring moves, and step-by-step verification. Ada-aware: includes Ada-specific smells and uses the project's make targets as the safety net.
+description: >-
+  Use when the user wants to refactor, clean up, restructure, or simplify
+  code, or asks to identify bad smells, code smells, or technical debt.
+  Covers evidence-based smell detection, prioritization, behaviour-preserving
+  refactoring, and step-by-step verification. Ada-aware and SPARK-aware:
+  includes language-specific signals and uses the project's build, test,
+  analysis, and proof targets as the safety net.
 ---
 
 # Refactoring with bad-smell detection
 
-Refactoring changes the structure of code without changing its
-behavior. The non-negotiable rule: **never mix a refactoring with a
-behavior change in the same change.** Refactor first in a separate,
-verifiable step, or let the refactoring enable the change — never both
-at once.
+Refactoring changes the structure of code without intentionally changing its
+observable behaviour.
 
-Catalog entries are heuristics, not automatic violations. Report a smell only
-when there is concrete evidence in the code and explain that evidence. The
-suggested refactorings are options, not mandatory transformations. Do not
-apply a refactoring mechanically when it would weaken readability, contracts,
-proof, performance, ownership, or the public API.
+The non-negotiable rule is:
 
-If the user asks only for a review, audit, or bad-smell hunt, stop after
-detection and prioritization. Do not modify the code.
+> Never mix a refactoring with a behaviour change in the same change.
+
+Refactor first in a separate, verifiable step, or let the refactoring enable a
+later behaviour change.
+
+## Operating principles
+
+Catalog entries are heuristics, not automatic violations.
+
+Report a smell only when there is concrete evidence in the code, and explain
+that evidence. Length, syntax, metrics, and textual patterns are signals, not
+proof by themselves.
+
+Suggested refactorings are options, not mandatory transformations. Do not
+apply them mechanically when they would weaken readability, contracts, proof,
+performance, ownership, compatibility, or the public API.
+
+Prefer the smallest refactoring that addresses the observed problem.
 
 ## Workflow
 
-1. **Establish the safety net before touching anything.** Run the
-   project's build and test targets (`make build`, `make test`,
-   `make check`; `make prove` in SPARK projects). If the safety net is
-   weak, report the gap before refactoring. Add focused characterization
-   tests only when permitted by the user and when the existing behaviour
-   can be observed unambiguously. Keep this preparation separate from
-   the refactoring itself.
-3. **Detect the smells** (catalog below). List what you find with
-   locations, do not fix anything yet.
-4. **Prioritize.** Fix the smells in or near the code you are about to
-   change (campsite rule). Rank by: risk if left in place, benefit to
-   the upcoming change, cost to fix. Do not refactor the whole codebase
-   for its own sake.
-5. **Refactor in small steps.** One move at a time.
-   After each move, run the narrowest relevant verification. Run the
-   complete project safety net before reporting the refactoring as
-   complete. If a step fails to verify, revert that step and
-   re-think; do not stack broken steps.
-6. **Report.** Smells found, smells fixed, smells left alone on
-   purpose, and what verification was run.
+1. **Determine the requested scope.**
 
-## Bad smells catalog
+   If the user asks only for a review, audit, or bad-smell hunt, stop after
+   detection and prioritization. Do not modify the code.
 
-### Inside a subprogram
+2. **Establish the safety net.**
+
+   Before modifying code, identify and run the relevant project targets, such
+   as:
+
+   - `make build`
+   - `make test`
+   - `make check`
+   - `make prove` in SPARK projects
+
+   Also identify narrower unit, test, analysis, or proof commands when the
+   project provides them.
+
+   If the safety net is weak, report the gap before refactoring. Add focused
+   characterization tests only when permitted by the user and when existing
+   behaviour can be observed unambiguously. Keep this preparation separate
+   from the refactoring.
+
+3. **Detect the smells.**
+
+   Inspect the requested diff, unit, package, subsystem, or codebase using the
+   catalog below. Report each finding with its location and concrete evidence.
+   Do not fix anything during this step.
+
+4. **Prioritize.**
+
+   Prefer smells in or near the code being changed: apply the campsite rule,
+   not a general cleanup campaign.
+
+   Rank candidates by:
+
+   - risk if left in place;
+   - benefit to the intended change;
+   - confidence in the diagnosis;
+   - cost and risk of the refactoring.
+
+5. **Refactor in small steps.**
+
+   Apply one coherent refactoring move at a time.
+
+   After each move, run the narrowest relevant verification. Run the complete
+   project safety net before reporting the refactoring as complete.
+
+   If a step fails verification, revert or correct that step before
+   continuing. Do not stack changes on a broken intermediate state.
+
+6. **Report.**
+
+   Report:
+
+   - smells found, with evidence;
+   - smells fixed;
+   - smells deliberately left unchanged, with reasons;
+   - refactoring steps performed;
+   - verification commands run and their results;
+   - remaining risks or safety-net gaps.
+
+## Bad-smell catalog
+
+### Within a subprogram
 
 - **Long or multi-purpose subprogram** — the subprogram combines distinct
   responsibilities, contains independently meaningful stages, or cannot be
   named precisely. Consider extracting cohesive operations. Length alone is
-  a signal, not sufficient evidence.
-- **Mixed levels of abstraction** — a subprogram combines high-level domain
-  operations with low-level representation, parsing, indexing, allocation,
-  or formatting details. Extract cohesive lower-level operations so that the
-  main flow reads at one level of abstraction.
-- **Duplicated code** — same logic, two places. Extract a common
-  subprogram or a generic; duplicate knowledge is the smell, not the
-  text alone.
-- **Deep nesting / long conditional chains** — look for mixed responsibilities
-  or obscured control flow. Consider guard clauses, extracted predicates,
-  `case` statements, or discriminated types. Do not introduce multiple exits
-  when they make contracts or proof paths harder to understand.
-  In Ada, prefer cohesive subprograms over deeply nested blocks; use named
-  loops and explicit `exit Loop_Name when Condition` statements when they
-  clarify control flow.
-- **Long parameter list / data clump** — parameters that travel
-  together: introduce a record (or private type) holding them.
-- **Flag argument** — a Boolean parameter that selects between distinct
-  behaviours. Consider splitting the operation into separate subprograms
-  or using an enumeration. Ignore booleans that represent genuine domain
-  state, user preferences, or simple diagnostic options.
-- **Boolean blindness** — a Boolean value or result does not reveal what
-  `True` and `False` mean at the declaration or call site. Consider a named
-  enumeration, predicate, or intention-revealing subprogram. Do not report
-  obvious predicates or genuine binary domain properties.
-- **Magic numbers** — a literal whose meaning, unit, origin, or constraint
-  is not evident locally. Introduce a named constant or a domain type when
-  the name adds information. Do not replace self-evident structural values
-  such as zero or one mechanically.
-- **Comments as deodorant** — comments that compensate for unclear structure
-  or restate what the code does. Refactor the code when practical, but retain
-  comments that explain rationale, external constraints, proof strategy, or
-  non-obvious invariants.
-- **Dead code** — unreachable branches, unused declarations, commented
-  code. Delete; the version control system remembers.
-- **Hidden mutable global state** — state is read or modified without this
-  dependency being visible in the abstraction or contracts. Pass it
-  explicitly, encapsulate it behind a package abstraction, or declare precise
-  SPARK `Global` dependencies..
-- **Overexposed mutability** — an API uses `in out`, writable access values,
-  or publicly mutable components although the operation needs only a narrow
-  update. Reduce the mutation surface or expose a domain operation that owns
-  the change.  
-- **Invalid states representable** — a record or set of independent values
-  permits combinations that have no valid domain meaning. Consider
-  discriminated records, constrained subtypes, private types, predicates, or
-  constructors that establish the invariant.
+  not sufficient evidence.
+
+- **Mixed levels of abstraction** — high-level domain operations are mixed
+  with low-level representation, parsing, indexing, allocation, or formatting
+  details. Extract cohesive lower-level operations so that the main flow reads
+  at one level of abstraction.
+
+- **Duplicated knowledge** — the same rule, calculation, invariant, or decision
+  is implemented in several places. Extract or centralize the common
+  knowledge. Similar text alone is not necessarily duplication.
+
+- **Deep or obscure control flow** — nesting, conditional chains, exits, or
+  exception paths make the operation difficult to follow. Consider guard
+  clauses, extracted predicates, `case` statements, discriminated types,
+  named loops, or explicit `exit Loop_Name when Condition` statements. Do not
+  introduce multiple exits when they make contracts or proof paths harder to
+  understand.
+
+- **Long parameter list or data clump** — several parameters repeatedly travel
+  together or collectively represent one concept. Consider introducing a
+  record or private type. Do not hide genuinely independent inputs in an
+  artificial parameter object.
+
+- **Flag argument** — a Boolean parameter selects between conceptually
+  distinct operations or substantial execution paths. Consider separate,
+  intention-revealing subprograms or an enumeration when the alternatives
+  remain variants of one operation. Do not report genuine domain state,
+  setters, independent preferences, or simple diagnostic options.
+
+- **Boolean blindness** — Boolean arguments or results do not make the meaning
+  of `True` and `False` clear at declaration or call sites. Consider named
+  predicates, enumerations, or intention-revealing operations. Do not report
+  obvious binary properties.
+
+- **Magic value** — a literal has a non-obvious meaning, unit, origin, or
+  constraint. Introduce a named constant or domain type when the name adds
+  information. Do not replace self-evident structural values such as zero or
+  one mechanically.
+
+- **Comment as deodorant** — a comment compensates for unclear structure or
+  restates what the code does. Refactor the code when practical, but retain
+  comments that explain rationale, external constraints, proof strategy,
+  algorithms, units, or non-obvious invariants.
+
+- **Dead code** — declarations, branches, parameters, assignments, or
+  commented-out code have no effect and no documented compatibility purpose.
+  Remove them after verifying that they are genuinely unused. Version control
+  preserves history.
+
+- **Exception-driven ordinary control flow** — exceptions represent expected
+  alternatives, routine absence, loop termination, or normal validation
+  outcomes. Prefer explicit results, predicates, option-like abstractions, or
+  normal control structures. Keep exceptions for conditions that the
+  abstraction defines as exceptional.
+
+### Within a type or package abstraction
+
+- **Low cohesion or divergent change** — a type or package has unrelated
+  responsibilities and changes for several independent reasons. Split it
+  along stable responsibilities, not merely by file size.
+
+- **Kitchen-sink package specification** — one visible specification exposes
+  unrelated types, constants, operations, and policies. Consider child
+  packages or subordinate abstractions organised by responsibility.
+
+- **Primitive obsession** — predefined scalar or string types represent
+  domain concepts with distinct validity rules, units, or operations.
+  Consider a derived scalar type, constrained subtype, enumeration, bounded
+  abstraction, or private type.
+
+- **Stringly typed data** — strings encode identifiers, modes, commands,
+  units, paths, or structured values with their own syntax and validity
+  rules. Introduce a domain type or parser at the system boundary.
+
 - **Unit confusion** — values with different physical or logical units share
-  the same numeric type, making accidental mixing possible. Introduce
-  distinct types or dimension-aware abstractions, with explicit conversions
-  at boundaries.
-- **Accidental nondeterminism** — observable results depend on container
-  iteration order, allocation order, unstable traversal, or unspecified
-  ordering although clients or tests require canonical output. Define and
-  enforce an explicit ordering at the relevant boundary.
-  
-### Between units
+  the same numeric type, allowing accidental mixing. Introduce distinct types
+  or dimension-aware abstractions, with explicit conversions at boundaries.
 
-- **Divergent change** — one package changes for many different
-  reasons. Split it along the reasons.
-- **Shotgun surgery** — one change forces edits in many packages.
-  Move code and data together into one unit.
-- **Feature envy** — a subprogram mostly interested in another type's
-  data. Move it there.
-- **Repeated kind-code dispatch** — several units repeatedly branch on the
-  same enumeration or kind field to select type-specific behaviour. Consider
-  moving the behaviour to a discriminated abstraction or to primitive
-  operations of a tagged type. A local, exhaustive `case` is not a smell by
-  itself.
-- **Representation leakage** — clients depend on the internal representation
-  of an abstraction, forcing unrelated code to change when that
-  representation evolves. Hide the representation behind a private type and
-  expose domain operations rather than storage details.
-- **Primitive obsession** — predefined scalar or string types are used where
-  a domain concept requires distinct validity rules, units, operations, or
-  contracts. Consider a derived scalar type, subtype, bounded abstraction,
-  enumeration, or private type.
-- **Stringly typed data** — strings encode identifiers, modes, units, paths,
-  commands, or structured values that have distinct syntax and validity
-  rules. Introduce an enumeration, derived string type, private type, or
-  parser at the system boundary.
-- **Speculative generality** — unused generics, parameters, hooks
-  "for later". Remove; add them when needed.
-- **Middle man / pass-through calls** — a unit that only forwards.
-  Collapse the indirection.
-- **Kitchen-sink package spec** — one spec declaring everything.
-  Split into child packages along responsibilities.
-- **Cyclic dependencies between packages** — a layering violation.
-  Re-examine which unit owns which responsibility; `gnatmetric` /
-  dependency analysis can confirm the cycle before you restructure.
+- **Invalid states representable** — a record or collection of independent
+  fields permits combinations with no valid domain meaning. Consider
+  discriminated records, constrained subtypes, static or dynamic predicates,
+  private types, or constructors that establish the invariant.
+
+- **Scattered invariant enforcement** — many callers check or restore the same
+  validity rule instead of the responsible abstraction owning it. Centralize
+  enforcement in constructors, primitive operations, predicates, type
+  invariants, or contracts.
+
+- **Representation leakage** — clients depend on storage layout, component
+  choices, indexing schemes, or other internal representation details.
+  Consider a private type exposing domain operations rather than storage
+  operations.
+
 - **Parallel collections** — several arrays or containers use the same index
-  to represent different attributes of one conceptual entity. Introduce a
-  record and store one collection of those records, unless a
-  structure-of-arrays layout is deliberately justified by performance.
-- **Temporal coupling** — operations must be called in an undocumented or
-  fragile order for an object or package to be valid. Encode the lifecycle
-  in the abstraction, expose distinct state types, or enforce it through
-  preconditions and postconditions.
-- **Scattered invariant enforcement** — the same validity condition is
-  checked or restored by many callers instead of being owned by the type or
-  package responsible for the data. Centralize it in constructors, primitive
-  operations, type invariants, predicates, or contracts.
-- **Contract–implementation mismatch** — the specification exposes weaker,
-  broader, or differently shaped semantics than the implementation actually
-  supports. Align types, parameter modes, preconditions, postconditions, and
-  exceptional behaviour with the real abstraction.
-- **Contract–implementation mismatch** — the specification exposes weaker,
-  broader, or differently shaped semantics than the implementation actually
-  supports. Align types, parameter modes, preconditions, postconditions, and
-  exceptional behaviour with the real abstraction.
-- **Contract–implementation mismatch** — the specification exposes weaker,
-  broader, or differently shaped semantics than the implementation actually
-  supports. Align types, parameter modes, preconditions, postconditions, and
-  exceptional behaviour with the real abstraction.
-            
-### Ada-specific
+  to hold attributes of one conceptual entity. Consider a collection of
+  records, unless a structure-of-arrays design is deliberately justified by
+  performance or interfacing constraints.
 
-- **Broad `use` clauses obscuring declaration origins** — report only when
-  visibility creates ambiguity or makes the code difficult to trace. Follow
-  the project's style rules; `use type` and `use all type` may be appropriate
-  for operators.
-- **Unnecessary access types or aliasing** — use of access values where object
-  ownership, optionality, dynamic allocation, or polymorphism is not required.
-  Prefer ordinary `in`, `out`, or `in out` parameters when they express the
-  intended lifetime and mutability. Do not report access types that model
-  required ownership, optional references, dispatch, or data structures.
-- **Unexplained `when others => null`** — potentially swallowed cases or
-  errors. Handle cases explicitly, document an intentional no-op, or assert
-  impossibility when justified. Do not replace an intentional no-op with an
-  exception mechanically.
+- **Overexposed mutability** — an API exposes writable components, `in out`
+  parameters, or writable access values although clients need only a narrow
+  operation. Reduce the mutation surface or provide a domain operation that
+  owns the update.
+
+- **Hidden mutable state** — state is read or modified without the dependency
+  being visible in the abstraction, call, or contracts. Pass it explicitly,
+  encapsulate it behind a package abstraction, or declare precise SPARK
+  `Global` dependencies.
+
+- **Speculative generality** — unused generics, parameters, hooks, abstraction
+  layers, or extension points exist only for hypothetical future needs.
+  Remove them unless they serve a documented requirement or compatibility
+  constraint.
+
+- **Middle man or pass-through abstraction** — a package or type mainly
+  forwards calls without adding policy, encapsulation, compatibility, or a
+  stable boundary. Collapse the indirection when it has no demonstrated role.
+
+- **Contract–implementation mismatch** — the specification exposes broader,
+  weaker, or differently shaped semantics than the implementation actually
+  supports. Align types, modes, contracts, exceptional behaviour, and
+  visibility with the intended abstraction.
+
+### Across units and system boundaries
+
+- **Shotgun surgery** — one conceptual change requires related edits in many
+  units. Reconsider where the affected data, policy, and operations are owned.
+
+- **Feature envy** — an operation primarily inspects or manipulates another
+  abstraction's data. Consider moving the operation, exposing a suitable
+  primitive operation, or revising the ownership boundary.
+
+- **Repeated kind-code dispatch** — several places branch on the same
+  enumeration, discriminant, or kind field to select type-specific behaviour.
+  Consider centralizing the dispatch, using a discriminated abstraction, or
+  defining primitive operations on a tagged type. A local exhaustive `case`
+  is not a smell by itself.
+
+- **Inappropriate intimacy** — units depend on each other's internal details
+  or repeatedly bypass their public abstractions. Move responsibilities,
+  expose appropriate operations, or extract the genuinely shared concept.
+
+- **Cyclic dependency** — units form a dependency cycle that obscures
+  layering, ownership, elaboration, or reuse. Confirm the cycle with compiler
+  dependency information or suitable analysis before restructuring it.
+
+- **Copy-paste variation between sibling units** — sibling packages reproduce
+  the same knowledge with small variations. Consider a parent package,
+  generic unit, shared subordinate abstraction, or generated source when the
+  commonality is stable.
+
+- **Temporal coupling** — operations must be invoked in an undocumented or
+  fragile order for an object or package to remain valid. Encode the lifecycle
+  in the abstraction, distinguish states through types, or enforce the order
+  with preconditions and postconditions.
+
+- **Accidental nondeterminism** — observable results depend on unstable
+  traversal, container iteration, allocation order, concurrency, or
+  unspecified ordering although clients or tests require canonical output.
+  Define and enforce an ordering at the relevant boundary.
+
+- **Boundary leakage** — parsing, formatting, transport, filesystem, user
+  interface, or tool-specific representations spread into the domain model.
+  Convert to domain abstractions at the boundary and keep external concerns
+  outside the core.
+
+### Ada and SPARK-specific signals
+
+These patterns require Ada- and project-specific judgement. They are not
+violations merely because the syntax occurs.
+
+- **Broad `use` clauses obscuring origins** — visibility makes declarations
+  ambiguous or difficult to trace. Follow the project's style rules;
+  `use type` and `use all type` may appropriately expose operators.
+
+- **Unnecessary access types or aliasing** — access values are used where
+  ownership, optionality, dynamic allocation, polymorphism, or linked data
+  structures are not required. Prefer ordinary parameter modes when they
+  express the intended lifetime and mutation. Do not report access types that
+  model a genuine ownership or representation need.
+
+- **Unexplained `when others => null`** — cases or errors may be silently
+  swallowed. Handle relevant alternatives explicitly, document an intentional
+  no-op, or assert impossibility when justified. Do not replace a legitimate
+  no-op mechanically with an exception.
+
 - **Surprising side effects in functions** — a function modifies externally
   visible state or performs actions that callers would not expect from a
-  query. Prefer a procedure when mutation is part of the operation's purpose.
-  Judge this against the project's Ada/SPARK contracts and restrictions
-  rather than assuming every function must be pure.
-- **Aliased or global variables used as implicit parameter passing** —
-  pass them; the contract becomes visible.
-- **Copy-paste with small edits between sibling packages** — extract
-  the common part into a parent or generic unit.
+  query. Prefer a procedure when mutation is central to the operation's
+  purpose. Judge the design against the project's Ada or SPARK restrictions
+  and contracts; do not assume that every Ada function must be pure.
 
-## Detection heuristics
+- **Implicit parameter passing through aliases or globals** — aliased or
+  global objects carry inputs and outputs that are not apparent from the
+  operation's interface or contracts. Pass them explicitly, encapsulate the
+  state, or declare precise data and dependency contracts.
 
-- Read the diff or the target unit and ask: can I name this subprogram
-  with subject-verb-object? Could I explain it without saying "and"?
-- `gnatmetric` for length, complexity, and coupling signals.
-- Textual search for markers: `when others`, `pragma Unreferenced`,
-  `access`, `use` clauses, repeated literal clusters, duplicated line
-  blocks.
-- In SPARK projects, growing proof complexity is a signal to inspect the code's
-  structure, contracts, data model, and missing intermediate assertions.
-  Do not assume restructuring is always the correct remedy.
+- **Unjustified warning, analysis, or proof suppression** — pragmas, aspects,
+  filters, or configuration switches silence diagnostics without a precise
+  local rationale. Remove the cause where practical, or document the reason
+  and keep the suppression as narrow as possible.
+
+- **Unconstrained predefined numeric types for domain values** — broad
+  predefined types permit values that the domain cannot accept. Consider
+  ranges, modular types, decimal or ordinary fixed-point types, predicates,
+  dimension-specific types, or private numeric abstractions.
+
+- **Unchecked conversion or representation dependence** — unchecked
+  conversions, explicit representation clauses, address manipulation, or
+  implementation-defined assumptions escape a clearly isolated boundary.
+  Confine them, state the assumptions, and verify size, alignment, endianness,
+  validity, and target constraints where relevant.
+
+- **Elaboration-order dependence** — correctness depends on implicit package
+  elaboration effects or mutable initialization order. Prefer explicit
+  initialization or a design whose dependencies are visible and verifiable.
+
+- **Proof complexity growth** — proofs require increasingly broad invariants,
+  assertions, lemmas, or prover-specific guidance. Inspect the code structure,
+  data model, contracts, and missing intermediate properties. Growing proof
+  effort is a signal, not proof that restructuring is necessarily the right
+  remedy.
+
+- **Implementation-driven public contracts** — public preconditions,
+  postconditions, or types expose incidental algorithmic limitations rather
+  than stable domain semantics. Separate domain guarantees from internal proof
+  or implementation details.
+
+## Detection methods
+
+Use several kinds of evidence. Do not diagnose from one metric or textual
+pattern alone.
+
+### Structural reading
+
+For each relevant subprogram, type, and package, ask:
+
+- Can its responsibility be stated precisely without saying "and" repeatedly?
+- Does each operation work at a coherent level of abstraction?
+- Is ownership of state and invariants clear?
+- Can invalid states or unit errors be represented?
+- Are dependencies, mutation, and exceptional behaviour visible?
+- Does the public specification express domain semantics rather than storage
+  or algorithmic details?
+
+### Change analysis
+
+Use the diff and recent change context to identify:
+
+- unrelated changes occurring together;
+- one concept edited in many units;
+- repeated fixes to the same invariant;
+- parallel changes in sibling packages;
+- public API changes caused by private representation changes.
+
+### Tools and textual signals
+
+When available, use:
+
+- compiler dependency information;
+- `gnatmetric` for size and complexity signals;
+- project formatting, linting, static-analysis, and review targets;
+- GNATprove reports and proof obligations;
+- targeted searches for constructs such as:
+  - `when others`;
+  - `pragma Unreferenced`;
+  - warning or proof suppressions;
+  - `Unchecked_Conversion`;
+  - access declarations;
+  - broad `use` clauses;
+  - repeated literals;
+  - duplicated conditionals;
+  - repeated discriminant or kind-code dispatch.
+
+Tool output is evidence to inspect, not an automatic smell report.
+
+### SPARK proof signals
+
+When proof becomes difficult, examine separately:
+
+- missing or weak subprogram contracts;
+- missing loop invariants or loop variants;
+- excessively broad frame conditions;
+- hidden global dependencies;
+- data structures that permit invalid states;
+- missing intermediate assertions or lemmas;
+- limitations of the selected prover;
+- genuinely difficult mathematical properties.
+
+Do not restructure correct and coherent code solely to reduce the number of
+annotations.
 
 ## Constraints in Lionel's projects
 
-- Shared rules live in `~/prj/ada-project-template/AGENTS.template.md`:
-  no commit without the owner's explicit consent, one refactor as one
-  reviewed change, report failures instead of pushing through.
-- Documentation is executable in these projects: when a refactoring
-  changes user-visible behaviour presentation (help text, output
-  formatting), update the Markdown scenarios in the same change — but
-  a true refactoring changes no behaviour at all.
+- Shared project rules live in
+  `~/prj/ada-project-template/AGENTS.template.md`.
+
+- Do not commit without the owner's explicit consent.
+
+- Keep one coherent refactoring as one reviewed change.
+
+- Report verification failures instead of working around or hiding them.
+
+- Preserve public behaviour, output, diagnostics, exit status, file formats,
+  and ordering unless a separate behaviour change has been explicitly
+  requested.
+
+- Documentation is executable in these projects. If a supposed refactoring
+  changes help text, output formatting, canonical ordering, scenarios, or
+  externally observable diagnostics, treat it as a behaviour change rather
+  than silently updating the documentation.
+
+- Update documentation in the same change only when the documentation
+  describes structure, architecture, names, or other non-behavioural facts
+  altered by the refactoring.
+
+- Never use formatting churn, unrelated renaming, or broad cleanup to hide the
+  semantic scope of a refactoring.
