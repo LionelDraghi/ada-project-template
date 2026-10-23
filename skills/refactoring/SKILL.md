@@ -412,7 +412,7 @@ annotations.
   and ordering unless a separate behaviour change has been explicitly
   requested.
 
-- Documentation is executable in these projects. If a supposed refactoring
+- Documentation may be `bbt` executable in these projects. If a supposed refactoring
   changes help text, output formatting, canonical ordering, scenarios, or
   externally observable diagnostics, treat it as a behaviour change rather
   than silently updating the documentation.
