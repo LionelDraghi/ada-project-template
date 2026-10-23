@@ -1,3 +1,4 @@
+---
 name: refactoring
 description: Use when the user wants to refactor, clean up, restructure, or simplify code, or asks to hunt "bad smells", "code smells", or technical debt. Covers smell detection, prioritization, behavior-preserving refactoring moves, and step-by-step verification. Ada-aware: includes Ada-specific smells and uses the project's make targets as the safety net.
 ---
@@ -50,6 +51,10 @@ detection and prioritization. Do not modify the code.
   responsibilities, contains independently meaningful stages, or cannot be
   named precisely. Consider extracting cohesive operations. Length alone is
   a signal, not sufficient evidence.
+- **Mixed levels of abstraction** — a subprogram combines high-level domain
+  operations with low-level representation, parsing, indexing, allocation,
+  or formatting details. Extract cohesive lower-level operations so that the
+  main flow reads at one level of abstraction.
 - **Duplicated code** — same logic, two places. Extract a common
   subprogram or a generic; duplicate knowledge is the smell, not the
   text alone.
@@ -57,12 +62,19 @@ detection and prioritization. Do not modify the code.
   or obscured control flow. Consider guard clauses, extracted predicates,
   `case` statements, or discriminated types. Do not introduce multiple exits
   when they make contracts or proof paths harder to understand.
+  In Ada, prefer cohesive subprograms over deeply nested blocks; use named
+  loops and explicit `exit Loop_Name when Condition` statements when they
+  clarify control flow.
 - **Long parameter list / data clump** — parameters that travel
   together: introduce a record (or private type) holding them.
 - **Flag argument** — a Boolean parameter that selects between distinct
   behaviours. Consider splitting the operation into separate subprograms
   or using an enumeration. Ignore booleans that represent genuine domain
   state, user preferences, or simple diagnostic options.
+- **Boolean blindness** — a Boolean value or result does not reveal what
+  `True` and `False` mean at the declaration or call site. Consider a named
+  enumeration, predicate, or intention-revealing subprogram. Do not report
+  obvious predicates or genuine binary domain properties.
 - **Magic numbers** — a literal whose meaning, unit, origin, or constraint
   is not evident locally. Introduce a named constant or a domain type when
   the name adds information. Do not replace self-evident structural values
@@ -77,7 +89,23 @@ detection and prioritization. Do not modify the code.
   dependency being visible in the abstraction or contracts. Pass it
   explicitly, encapsulate it behind a package abstraction, or declare precise
   SPARK `Global` dependencies..
-
+- **Overexposed mutability** — an API uses `in out`, writable access values,
+  or publicly mutable components although the operation needs only a narrow
+  update. Reduce the mutation surface or expose a domain operation that owns
+  the change.  
+- **Invalid states representable** — a record or set of independent values
+  permits combinations that have no valid domain meaning. Consider
+  discriminated records, constrained subtypes, private types, predicates, or
+  constructors that establish the invariant.
+- **Unit confusion** — values with different physical or logical units share
+  the same numeric type, making accidental mixing possible. Introduce
+  distinct types or dimension-aware abstractions, with explicit conversions
+  at boundaries.
+- **Accidental nondeterminism** — observable results depend on container
+  iteration order, allocation order, unstable traversal, or unspecified
+  ordering although clients or tests require canonical output. Define and
+  enforce an explicit ordering at the relevant boundary.
+  
 ### Between units
 
 - **Divergent change** — one package changes for many different
@@ -91,12 +119,18 @@ detection and prioritization. Do not modify the code.
   moving the behaviour to a discriminated abstraction or to primitive
   operations of a tagged type. A local, exhaustive `case` is not a smell by
   itself.
-- **Inappropriate intimacy** — two packages delving into each other's
-  private parts. Move functions, or extract the shared part.
+- **Representation leakage** — clients depend on the internal representation
+  of an abstraction, forcing unrelated code to change when that
+  representation evolves. Hide the representation behind a private type and
+  expose domain operations rather than storage details.
 - **Primitive obsession** — predefined scalar or string types are used where
   a domain concept requires distinct validity rules, units, operations, or
   contracts. Consider a derived scalar type, subtype, bounded abstraction,
   enumeration, or private type.
+- **Stringly typed data** — strings encode identifiers, modes, units, paths,
+  commands, or structured values that have distinct syntax and validity
+  rules. Introduce an enumeration, derived string type, private type, or
+  parser at the system boundary.
 - **Speculative generality** — unused generics, parameters, hooks
   "for later". Remove; add them when needed.
 - **Middle man / pass-through calls** — a unit that only forwards.
@@ -106,7 +140,31 @@ detection and prioritization. Do not modify the code.
 - **Cyclic dependencies between packages** — a layering violation.
   Re-examine which unit owns which responsibility; `gnatmetric` /
   dependency analysis can confirm the cycle before you restructure.
-
+- **Parallel collections** — several arrays or containers use the same index
+  to represent different attributes of one conceptual entity. Introduce a
+  record and store one collection of those records, unless a
+  structure-of-arrays layout is deliberately justified by performance.
+- **Temporal coupling** — operations must be called in an undocumented or
+  fragile order for an object or package to be valid. Encode the lifecycle
+  in the abstraction, expose distinct state types, or enforce it through
+  preconditions and postconditions.
+- **Scattered invariant enforcement** — the same validity condition is
+  checked or restored by many callers instead of being owned by the type or
+  package responsible for the data. Centralize it in constructors, primitive
+  operations, type invariants, predicates, or contracts.
+- **Contract–implementation mismatch** — the specification exposes weaker,
+  broader, or differently shaped semantics than the implementation actually
+  supports. Align types, parameter modes, preconditions, postconditions, and
+  exceptional behaviour with the real abstraction.
+- **Contract–implementation mismatch** — the specification exposes weaker,
+  broader, or differently shaped semantics than the implementation actually
+  supports. Align types, parameter modes, preconditions, postconditions, and
+  exceptional behaviour with the real abstraction.
+- **Contract–implementation mismatch** — the specification exposes weaker,
+  broader, or differently shaped semantics than the implementation actually
+  supports. Align types, parameter modes, preconditions, postconditions, and
+  exceptional behaviour with the real abstraction.
+            
 ### Ada-specific
 
 - **Broad `use` clauses obscuring declaration origins** — report only when
