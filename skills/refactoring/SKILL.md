@@ -10,32 +10,40 @@ behavior change in the same change.** Refactor first in a separate,
 verifiable step, or let the refactoring enable the change — never both
 at once.
 
+If the user asks only for a review, audit, or bad-smell hunt, stop after
+detection and prioritization. Do not modify the code.
+
 ## Workflow
 
 1. **Establish the safety net before touching anything.** Run the
    project's build and test targets (`make build`, `make test`,
    `make check`; `make prove` in SPARK projects). If the safety net is
-   weak, say so and strengthen it first — do not refactor code you
-   cannot verify.
-2. **Detect the smells** (catalog below). List what you find with
+   weak, report the gap before refactoring. Add focused characterization
+   tests only when permitted by the user and when the existing behaviour
+   can be observed unambiguously. Keep this preparation separate from
+   the refactoring itself.
+3. **Detect the smells** (catalog below). List what you find with
    locations, do not fix anything yet.
-3. **Prioritize.** Fix the smells in or near the code you are about to
+4. **Prioritize.** Fix the smells in or near the code you are about to
    change (campsite rule). Rank by: risk if left in place, benefit to
    the upcoming change, cost to fix. Do not refactor the whole codebase
    for its own sake.
-4. **Refactor in small steps.** One move at a time, re-run the safety
-   net after each move. If a step fails to verify, revert that step and
+5. **Refactor in small steps.** One move at a time.
+   After each move, run the narrowest relevant verification. Run the
+   complete project safety net before reporting the refactoring as
+   complete. If a step fails to verify, revert that step and
    re-think; do not stack broken steps.
-5. **Report.** Smells found, smells fixed, smells left alone on
+6. **Report.** Smells found, smells fixed, smells left alone on
    purpose, and what verification was run.
 
 ## Bad smells catalog
 
 ### Inside a subprogram
 
-- **Long function** — does several things; hard to name. Extract
-  function. In Ada, prefer small subprograms over nested blocks;
-  named loops and exit labels over deep nesting.
+- **Long or multi-purpose subprogram** — the subprogram combines distinct
+  responsibilities, contains independently meaningful stages, or cannot be
+  named precisely. Consider extracting cohesive operations. Length alone is
+  a signal, not sufficient evidence.
 - **Duplicated code** — same logic, two places. Extract a common
   subprogram or a generic; duplicate knowledge is the smell, not the
   text alone.
