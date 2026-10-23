@@ -44,8 +44,10 @@ at once.
   discrimination on a type.
 - **Long parameter list / data clump** — parameters that travel
   together: introduce a record (or private type) holding them.
-- **Flag argument** — a Boolean that selects behavior. Split into two
-  subprograms.
+- **Flag argument** — a Boolean parameter that selects between distinct
+  behaviours. Consider splitting the operation into separate subprograms
+  or using an enumeration. Ignore booleans that represent genuine domain
+  state, user preferences, or simple diagnostic options.
 - **Magic numbers** — unexplained literals. Named constants, with the
   bound justified where the project requires it.
 - **Comments as deodorant** — a comment explaining messy code. Refactor
