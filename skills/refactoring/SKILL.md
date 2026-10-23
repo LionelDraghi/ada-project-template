@@ -10,6 +10,12 @@ behavior change in the same change.** Refactor first in a separate,
 verifiable step, or let the refactoring enable the change — never both
 at once.
 
+Catalog entries are heuristics, not automatic violations. Report a smell only
+when there is concrete evidence in the code and explain that evidence. The
+suggested refactorings are options, not mandatory transformations. Do not
+apply a refactoring mechanically when it would weaken readability, contracts,
+proof, performance, ownership, or the public API.
+
 If the user asks only for a review, audit, or bad-smell hunt, stop after
 detection and prioritization. Do not modify the code.
 
@@ -47,24 +53,30 @@ detection and prioritization. Do not modify the code.
 - **Duplicated code** — same logic, two places. Extract a common
   subprogram or a generic; duplicate knowledge is the smell, not the
   text alone.
-- **Deep nesting / long conditional chains** — guard clauses (early
-  return), extract function, replace nested conditionals with case or
-  discrimination on a type.
+- **Deep nesting / long conditional chains** — look for mixed responsibilities
+  or obscured control flow. Consider guard clauses, extracted predicates,
+  `case` statements, or discriminated types. Do not introduce multiple exits
+  when they make contracts or proof paths harder to understand.
 - **Long parameter list / data clump** — parameters that travel
   together: introduce a record (or private type) holding them.
 - **Flag argument** — a Boolean parameter that selects between distinct
   behaviours. Consider splitting the operation into separate subprograms
   or using an enumeration. Ignore booleans that represent genuine domain
   state, user preferences, or simple diagnostic options.
-- **Magic numbers** — unexplained literals. Named constants, with the
-  bound justified where the project requires it.
-- **Comments as deodorant** — a comment explaining messy code. Refactor
-  until the comment becomes redundant.
+- **Magic numbers** — a literal whose meaning, unit, origin, or constraint
+  is not evident locally. Introduce a named constant or a domain type when
+  the name adds information. Do not replace self-evident structural values
+  such as zero or one mechanically.
+- **Comments as deodorant** — comments that compensate for unclear structure
+  or restate what the code does. Refactor the code when practical, but retain
+  comments that explain rationale, external constraints, proof strategy, or
+  non-obvious invariants.
 - **Dead code** — unreachable branches, unused declarations, commented
   code. Delete; the version control system remembers.
-- **Mutable global state read or written silently** — the caller cannot
-  see the side effect. Pass state explicitly; in SPARK projects this
-  also poisons proof contexts.
+- **Hidden mutable global state** — state is read or modified without this
+  dependency being visible in the abstraction or contracts. Pass it
+  explicitly, encapsulate it behind a package abstraction, or declare precise
+  SPARK `Global` dependencies..
 
 ### Between units
 
@@ -74,13 +86,17 @@ detection and prioritization. Do not modify the code.
   Move code and data together into one unit.
 - **Feature envy** — a subprogram mostly interested in another type's
   data. Move it there.
-- **Switch / if-chain on a type tag** — replace with case on a
-  discriminated record, or class-wide dispatch in tagged-type designs.
+- **Repeated kind-code dispatch** — several units repeatedly branch on the
+  same enumeration or kind field to select type-specific behaviour. Consider
+  moving the behaviour to a discriminated abstraction or to primitive
+  operations of a tagged type. A local, exhaustive `case` is not a smell by
+  itself.
 - **Inappropriate intimacy** — two packages delving into each other's
   private parts. Move functions, or extract the shared part.
-- **Primitive obsession** — Integer/String used where a distinct type
-  would carry the contract. In Ada, declare a new type with a range or
-  a private type with explicit contracts; this is cheap and strong.
+- **Primitive obsession** — predefined scalar or string types are used where
+  a domain concept requires distinct validity rules, units, operations, or
+  contracts. Consider a derived scalar type, subtype, bounded abstraction,
+  enumeration, or private type.
 - **Speculative generality** — unused generics, parameters, hooks
   "for later". Remove; add them when needed.
 - **Middle man / pass-through calls** — a unit that only forwards.
@@ -93,16 +109,24 @@ detection and prioritization. Do not modify the code.
 
 ### Ada-specific
 
-- **`use` clauses hiding origins** — prefer `use type` for operators
-  only; qualify the rest. Check the project's style rules first.
-- **Access types where a plain object or parameter mode would do** —
-  heap and aliasing complicate proofs and lifetime analysis. Prefer
-  `in`/`in out` parameters and `in` access parameters over
-  pointer-returning functions.
-- **`when others => null`** — swallowed cases and errors. Handle the
-  cases explicitly or assert impossibility with a check.
-- **Side-effecting functions** — in Ada, functions should be pure
-  (side effects break contracts and SPARK). Make it a procedure.
+- **Broad `use` clauses obscuring declaration origins** — report only when
+  visibility creates ambiguity or makes the code difficult to trace. Follow
+  the project's style rules; `use type` and `use all type` may be appropriate
+  for operators.
+- **Unnecessary access types or aliasing** — use of access values where object
+  ownership, optionality, dynamic allocation, or polymorphism is not required.
+  Prefer ordinary `in`, `out`, or `in out` parameters when they express the
+  intended lifetime and mutability. Do not report access types that model
+  required ownership, optional references, dispatch, or data structures.
+- **Unexplained `when others => null`** — potentially swallowed cases or
+  errors. Handle cases explicitly, document an intentional no-op, or assert
+  impossibility when justified. Do not replace an intentional no-op with an
+  exception mechanically.
+- **Surprising side effects in functions** — a function modifies externally
+  visible state or performs actions that callers would not expect from a
+  query. Prefer a procedure when mutation is part of the operation's purpose.
+  Judge this against the project's Ada/SPARK contracts and restrictions
+  rather than assuming every function must be pure.
 - **Aliased or global variables used as implicit parameter passing** —
   pass them; the contract becomes visible.
 - **Copy-paste with small edits between sibling packages** — extract
@@ -116,8 +140,9 @@ detection and prioritization. Do not modify the code.
 - Textual search for markers: `when others`, `pragma Unreferenced`,
   `access`, `use` clauses, repeated literal clusters, duplicated line
   blocks.
-- In SPARK projects, proof obligations that require ever-larger
-  annotations to discharge are a smell: the code wants restructuring.
+- In SPARK projects, growing proof complexity is a signal to inspect the code's
+  structure, contracts, data model, and missing intermediate assertions.
+  Do not assume restructuring is always the correct remedy.
 
 ## Constraints in Lionel's projects
 
