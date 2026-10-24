@@ -135,6 +135,16 @@ Shape each reference as: "To <goal>, read <file>." A project's
 document is truly always needed, it belongs in the mandatory rules
 instead.
 
+## Semantic tools (shared)
+
+Prefer the Ada language server for semantic navigation and for code
+modification: locate declarations, references and symbol bodies, then
+edit at the symbol level (replace a symbol body, insert before or
+after one, rename or delete with reference updates), rather than by
+textual search and hand-counted line edits. When the agent runs with
+the Serena MCP, use it as the vehicle for these operations, and
+activate the project matching the working directory first.
+
 ## Skills (shared)
 
 Load the matching skill before the corresponding work:
