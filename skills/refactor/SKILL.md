@@ -365,7 +365,8 @@ Use the diff and recent change context to identify:
 When available, use:
 
 - compiler dependency information;
-- `gnatmetric` for size and complexity signals;
+- `gnatmetric` for size and complexity signals (cf. the metric entry
+  points subsection below);
 - project formatting, linting, static-analysis, and review targets;
 - GNATprove reports and proof obligations;
 - targeted searches for constructs such as:
@@ -380,6 +381,37 @@ When available, use:
   - repeated discriminant or kind-code dispatch.
 
 Tool output is evidence to inspect, not an automatic smell report.
+
+### Metric entry points with gnatmetric
+
+`gnatmetric` (from libadalang_tools) is the entry-point finder for this
+workflow. Run it once over the project:
+
+```sh
+gnatmetric --complexity-all src/*.ads src/*.adb
+```
+
+Interpretation rules:
+
+- **Metrics rank reading order; they never trigger a refactoring by
+  themselves.** A high cyclomatic complexity is a reason to start
+  reading, not an obligation to restructure. The structural reading and
+  change analysis below decide whether a refactoring is warranted.
+- `cyclomatic complexity` (subprogram level) — rank subprograms with it
+  to pick the reading order.
+- `essential complexity` — sensitivity to unstructured control flow. A
+  high value alongside a moderate cyclomatic value is a stronger signal
+  than either alone.
+- file-level `code lines` — locate kitchen-sink units before splitting
+  them.
+- Known false positives: exhaustive `case` dispatch over an enumeration
+  (verbose, not a smell — cf. repeated kind-code dispatch), and
+  table-driven or generated code that inflates branch counts.
+- A source that fails to parse is silently missing from the sums: check
+  stderr before trusting the totals.
+- Side effect to know: by default gnatmetric writes one `.metrix` file
+  per analyzed source next to it. Redirect them with
+  `--output-dir=<tmp>` to keep the source tree clean.
 
 ### SPARK proof signals
 
