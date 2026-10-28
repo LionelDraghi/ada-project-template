@@ -29,13 +29,9 @@ Source: <issue, discussion, concern, or request>
 
 ## Executable scenarios
 
-<!-- Load the bbt skill before editing this section. Remove the placeholder when no scenario is applicable and explain why below. -->
-
-One scenario per behavior, steps as list items starting with `Given`,
-`When`, `Then`; commands and short parameters between backticks.
-Group related scenarios under a `Feature` heading, and factor common
-preconditions into a `Background`. Validate with `bbt explain` on the
-file.
+<!-- Load the bbt skill before editing this section: it defines the
+scenario syntax. Remove the placeholder when no scenario is applicable
+and explain why below. -->
 
 ### Scenario: <observable behavior>
 

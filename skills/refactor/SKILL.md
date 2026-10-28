@@ -35,6 +35,17 @@ performance, ownership, compatibility, or the public API.
 
 Prefer the smallest refactoring that addresses the observed problem.
 
+## Tooling
+
+For Ada sources, prefer the Serena MCP over grep, sed, or plain file
+reads: activate the project matching the working directory first, then
+explore and check with symbol-level operations —
+`s.lsp.get_symbols_overview`, `s.lsp.find_symbol`,
+`s.lsp.find_referencing_symbols` before any change, rename with
+`s.lsp.rename_symbol`, and read `s.lsp.get_diagnostics_for_file`
+before finishing. Load the `ada-pro` skill before writing or reviewing
+any Ada code.
+
 ## Workflow
 
 1. **Determine the requested scope.**

@@ -13,13 +13,11 @@ ArchiCheck, TopoProof, and the next ones).
 
 ## Shared lifecycle
 
-```mermaid
-flowchart LR
-    Explore --> Propose --> Implement --> Refactor --> Finalize --> Release
-    Implement -.->|ambiguity or behavior change| Propose
-```
-
-`Refactor` is conditional. `Release` is optional and always requires an explicit user decision.
+Development follows the shared lifecycle — Explore, Propose,
+Implement, Refactor, Finalize, Release — with `Refactor` conditional
+and `Release` optional. The phase details, skills, and state
+discipline live in [`AGENTS.md`](AGENTS.md) and
+[`lifecycle.md`](lifecycle.md).
 
 ## Repository contents
 

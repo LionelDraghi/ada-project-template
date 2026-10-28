@@ -22,6 +22,9 @@ Use when the user asks to implement, develop, fix, or make a scenario pass.
 - affected feature specifications;
 - local project commands and enabled capabilities;
 - only the source files needed for the change;
+- the Serena MCP: activate the project matching the working directory
+  first, then prefer symbol-level operations over grep and
+  hand-counted line edits;
 - `ada-pro` when writing, reviewing or debugging Ada code, and the
   `gnatprove` skill before changing proof strategy.
 

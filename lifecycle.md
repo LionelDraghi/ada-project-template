@@ -4,7 +4,12 @@ This file details the shared lifecycle sketched in
 [`AGENTS.md`](AGENTS.md): the phases, the skill to load in each, and
 the completion criteria per phase. Read the phase you are entering,
 not the whole file. Release has its own shared procedure,
-[`release_procedure.md`](release_procedure.md).
+[`release_procedure.md`](release_procedure.md). The standard project
+tree is given in the
+[README](https://github.com/LionelDraghi/ada-project-template#standard-project-tree);
+the documentation structure — responsibilities, naming conventions,
+proposal lifecycle, concerns, roadmap and design discussions — is
+detailed in [`documentation_structure.md`](documentation_structure.md).
 
 ## Entering a phase
 
@@ -17,6 +22,27 @@ Interpret intent, not only exact wording:
 - "Integrate it", "Everything is green, finish it" -> Finalize.
 - "Release", "Publish", "Bump the version" -> Release.
 - "What do we do now?" -> use `skills/next-task/SKILL.md`.
+
+## State discipline
+
+The working state is one of:
+
+```text
+Initial | Exploring | Proposing | Implementing | Refactoring | Finalizing | Releasing
+```
+
+Infer it from the user's instruction, current changes, active proposal,
+and recent validation evidence. Do not create a state file solely to
+track this value.
+
+- Finish or explicitly suspend current work before selecting unrelated work.
+- A return from Implement to Propose is normal when the expected
+  behavior needs correction or clarification.
+- Never silently weaken a scenario to make an implementation pass.
+- Never move a candidate specification into `docs/features/` before
+  Finalize.
+- Never publish, tag, or bump a release version without explicit
+  release intent.
 
 ## Explore
 
@@ -57,27 +83,9 @@ smallest coherent code change, and run the validations enabled for the
 project. Return to Propose if implementation reveals an ambiguity or
 changes the expected behavior.
 
-Use `skills/implement/SKILL.md`. Load `ada-pro` when writing,
-reviewing or debugging Ada code, and the `gnatprove` skill before
-changing proof strategy.
-
-Verification responsibilities:
-
-- **bbt** for observable and end-to-end behavior. A behavior change
-  should normally have at least one relevant scenario before
-  implementation is treated as complete. The Markdown specification is
-  the durable source.
-- **Unit tests** for internal components, when they provide fast,
-  focused evidence not duplicated meaninglessly by acceptance
-  scenarios.
-- **SPARK and formal proof**, when enabled: preserve the project's
-  proof level and switches; run the configured GNATprove command for
-  affected units; do not replace an unproved obligation with a test
-  without an explicit decision; document justified limitations in the
-  authoritative source.
-- **Build, static analysis, and metrics**: run the configured project
-  checks for affected code; generated reports are evidence, not
-  hand-edited sources.
+Use `skills/implement/SKILL.md`; it details the procedure and the
+verification responsibilities — build, tests, analysis, proofs — per
+change.
 
 Implement is done when the affected bbt scenarios pass, the enabled
 unit tests, SPARK analysis, proofs, and build checks pass, and the Git

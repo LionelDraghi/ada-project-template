@@ -26,8 +26,6 @@ A project may omit an inapplicable file, but must not invent a different name or
 
 The bbt scenario pages: integrated behavioral specifications and durable examples — the executable documentation. Documents may combine explanatory prose with executable bbt scenarios.
 
-Existing project category prefixes may be preserved where useful, but their meanings must be recorded in the local documentation index. New projects should prefer descriptive names unless stable category prefixes provide genuine navigation value.
-
 ### `docs/proposed/`
 
 Candidate changes awaiting implementation or integration. The directory is named by state, not by change type. It may contain:
@@ -40,8 +38,6 @@ Candidate changes awaiting implementation or integration. The directory is named
 - other changes requiring review before integration.
 
 A proposal may start as prose. Executable scenarios are added when the expected behavior is clear.
-
-This is a common name, chosen for convergence: bbt's `docs/proposed_features/` is renamed `docs/proposed/`.
 
 ### `docs/dev/`
 
@@ -95,19 +91,15 @@ Sources include:
 
 A closed concern is removed or marked closed according to the project's desired history policy. The authoritative source retains the details.
 
-This is a new shared index, chosen for convergence: existing per-project indexes (bbt's `docs/dev/issues_index.md`) migrate into `docs/dev/concerns.md` at the next Finalize.
-
 ## 6. Roadmap
 
 `docs/roadmap.md` describes intentional future development. It points to proposals, discussions, or specifications. It does not contain low-level defect details.
-
-Existing plan documents — a `TDL.md`, `perspectives.md`, or `docs/dev/development-plan.md` — converge into `docs/roadmap.md`: rename or merge them at the next Finalize. Git history preserves the previous content.
 
 Priority concerns are considered before roadmap additions when choosing new work, unless the user chooses otherwise.
 
 ## 7. Design discussions
 
-`docs/dev/design_discussions.md` records structural choices, alternatives, rationale, and status. This is already the name in use in the existing projects: no migration is needed.
+`docs/dev/design_discussions.md` records structural choices, alternatives, rationale, and status.
 
 Suggested statuses:
 
@@ -120,3 +112,17 @@ An open decision may be indexed as a concern when it blocks work or creates mate
 ## 8. Changelog
 
 Use Semantic Versioning and Keep a Changelog conventions. Maintain an Unreleased section. Update it during Finalize when the change matters to users; do not bump a release version until Release.
+
+## 9. Migrations from existing projects
+
+One-shot notes for existing projects adopting this structure:
+
+- bbt's `docs/proposed_features/` is renamed `docs/proposed/`;
+- existing per-project concern indexes (bbt's
+  `docs/dev/issues_index.md`) migrate into `docs/dev/concerns.md` at
+  the next Finalize;
+- existing plan documents — a `TDL.md`, `perspectives.md`, or
+  `docs/dev/development-plan.md` — converge into `docs/roadmap.md`:
+  rename or merge them at the next Finalize;
+- `docs/dev/design_discussions.md` is already the name in use in the
+  existing projects: no migration is needed.

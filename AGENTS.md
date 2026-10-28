@@ -15,18 +15,10 @@ justified.
 
 ## How to use this file
 
-In a new project's `AGENTS.md`, start with:
-
-> The shared rules for Lionel's Ada projects live in the [reference
-> repository on GitHub](https://github.com/LionelDraghi/ada-project-template/blob/main/AGENTS.md)
-> and apply here in full.
->
-> **Read it immediately, before any other reading or any action.**
-
-Then keep only the project-specific sections (build pointers, testing
-tools, domain rules, conditional readings). Do not copy the shared
-sections below into the project: point to them, so that a fix here
-applies everywhere.
+A project's `AGENTS.md` points to this file instead of copying it, and
+keeps only what is specific to that project. The exact reference block
+and the project skeleton are in the
+[README](README.md#how-the-projects-use-it) and [`project/`](project/).
 
 ---
 
@@ -64,23 +56,10 @@ applies everywhere.
 
 ## Local project configuration
 
-Read these values from the local `AGENTS.md`:
-
-- project identity and purpose;
-- enabled capabilities;
-- build and validation commands;
-- project-specific paths or parameters;
-- justified exceptions.
-
-Supported common capabilities are:
-
-- bbt executable specifications;
-- unit tests;
-- SPARK analysis;
-- formal proof with GNATprove;
-- static analysis and quality metrics;
-- release through Alire;
-- platform packaging where configured.
+Read the project's values — identity and purpose, enabled
+capabilities, build and validation commands, specific paths or
+parameters, justified exceptions — from its own `AGENTS.md`. Their
+format is defined by the [`project/`](project/) skeleton.
 
 A disabled capability is skipped. An enabled capability follows the common rules in this file and its skill. Do not recreate those rules locally.
 
@@ -94,6 +73,10 @@ repository, `release_procedure.md`, parameterized by each project's
 `docs/dev/release_procedure.md`.
 
 ```mermaid
+---
+config:
+  theme: base
+---
 flowchart LR
     Explore --> Propose --> Implement --> Refactor --> Finalize --> Release
     Implement -.->|ambiguity or behavior change| Propose
@@ -137,13 +120,6 @@ Infer it from the user's instruction, current changes, active proposal, and rece
 - A return from Implement to Propose is normal when the expected behavior needs correction or clarification.
 - Never silently weaken a scenario to make an implementation pass.
 - Never move a candidate specification into `docs/features/` before Finalize.
-- Never publish, tag, or bump a release version without explicit release intent.
-
-The standard project tree that every project follows is given in the
-[README](https://github.com/LionelDraghi/ada-project-template#standard-project-tree);
-the documentation structure — responsibilities, naming conventions,
-proposal lifecycle, concerns, roadmap and design discussions — is
-detailed in [`documentation_structure.md`](documentation_structure.md).
 
 ## Reference policy (shared)
 
