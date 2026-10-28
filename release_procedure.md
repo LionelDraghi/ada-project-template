@@ -18,6 +18,11 @@ This document is the single reference for:
 Do not commit, push, tag, create a GitHub release or publish to Alire
 without the owner's explicit approval. No step below overrides this.
 
+In the shared lifecycle, Release follows Finalize and never starts
+automatically: a finalized change stays on the development version
+until the owner explicitly asks for a release. The release skill
+(`skills/release/SKILL.md`) only drives the steps below.
+
 ## Parameters
 
 Every step below refers to the project's parameter table, which fixes:

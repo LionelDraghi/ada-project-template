@@ -1,5 +1,5 @@
 ---
-name: refactoring
+name: refactor
 description: >-
   Use when the user wants to refactor, clean up, restructure, or simplify
   code, or asks to identify bad smells, code smells, or technical debt.
@@ -400,7 +400,7 @@ annotations.
 ## Constraints in Lionel's projects
 
 - Shared project rules live in
-  `~/prj/ada-project-template/AGENTS.template.md`.
+  https://github.com/LionelDraghi/ada-project-template/blob/main/AGENTS.md.
 
 - Do not commit without the owner's explicit consent.
 
