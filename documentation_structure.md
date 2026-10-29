@@ -6,6 +6,7 @@
 docs/
 ├── changelog.md
 ├── roadmap.md
+├── specifications.md
 ├── features/
 ├── proposed/
 ├── tests_results/
@@ -25,6 +26,21 @@ A project may omit an inapplicable file, but must not invent a different name or
 ### `docs/features/`
 
 The bbt scenario pages: integrated behavioral specifications and durable examples — the executable documentation. Documents may combine explanatory prose with executable bbt scenarios.
+
+### `docs/specifications.md`
+
+The specifications index. It holds the project's cross-feature
+specifications — the rules that apply across features, each with a
+stable `Snnn` identifier — and the index of the `docs/features/`
+pages. The feature pages own every detail: the index may summarise a
+feature, but never repeats what the page states; one durable source
+per fact.
+
+Feature pages are numbered by a stable scheme with one prefix per
+feature series, defined by the project. A number never changes
+meaning, a removed scenario is never reused, and pages keep their
+number for life. Source code, scenarios, and documents may reference
+a specification or feature identifier (e.g. `[S003]`, `[A002-02]`).
 
 ### `docs/proposed/`
 
@@ -53,6 +69,8 @@ Reproducible reports. Files in these directories state their generator and must 
 - Use concise descriptive names: `run_in_shell.md`, not `proposal_2026_10_28.md`.
 - Do not encode workflow status in the file name; the directory carries the status.
 - Preserve stable identifiers for externally referenced specifications or design decisions.
+- Number feature pages and specifications with the stable scheme of
+  `docs/specifications.md`; never reuse a freed number.
 - Use relative Markdown links inside the repository.
 
 ## 4. Proposal lifecycle
