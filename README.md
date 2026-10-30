@@ -22,10 +22,22 @@ ArchiCheck, TopoProof, and the next ones).
 
 ## Shared lifecycle
 
-Development follows the shared lifecycle — Explore, Propose,
+Development follows a shared lifecycle — Explore, Propose,
 Implement, Refactor, Finalize, Release — with `Refactor` conditional
-and `Release` optional. The phase details, skills, and state
-discipline live in [`AGENTS.md`](AGENTS.md) and
+and `Release` optional.
+
+```mermaid
+---
+config:
+  theme: base
+---
+flowchart LR
+    Explore --> Propose --> Implement --> Refactor --> Finalize --> Release
+    Implement -.->|ambiguity or behavior change| Propose
+    Release -.->|next roadmap item| Propose
+    Release -.->|roadmap done| Explore
+```
+The phase details, skills, and state discipline live in [`AGENTS.md`](AGENTS.md) and
 [`lifecycle.md`](lifecycle.md).
 
 ## Repository contents

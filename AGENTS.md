@@ -87,16 +87,6 @@ publication have a shared procedure instead: it lives in this
 repository, `release_procedure.md`, parameterized by each project's
 `docs/dev/release_procedure.md`.
 
-```mermaid
----
-config:
-  theme: base
----
-flowchart LR
-    Explore --> Propose --> Implement --> Refactor --> Finalize --> Release
-    Implement -.->|ambiguity or behavior change| Propose
-```
-
 `Refactor` is conditional. `Release` is optional and always requires an
 explicit user decision.
 
@@ -158,6 +148,7 @@ Infer it from the user's instruction, current changes, active proposal, and rece
 - A return from Implement to Propose is normal when the expected behavior needs correction or clarification.
 - Never silently weaken a scenario to make an implementation pass.
 - Never move a candidate specification into `docs/features/` before Finalize.
+- Never publish, tag, or bump a release version without explicit release intent.
 
 ## Reference policy (shared)
 

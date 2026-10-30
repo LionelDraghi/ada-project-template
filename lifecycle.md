@@ -11,10 +11,12 @@ the documentation structure — responsibilities, naming conventions,
 proposal lifecycle, concerns, roadmap and design discussions — is
 detailed in [`documentation_structure.md`](documentation_structure.md).
 
+The lifecycle flow — phases and the loops between them — is diagrammed
+in the [README](README.md#shared-lifecycle).
+
 ## Contents <!-- omit from toc -->
 
 - [Entering a phase](#entering-a-phase)
-- [State discipline](#state-discipline)
 - [Explore](#explore)
 - [Propose](#propose)
 - [Implement](#implement)
@@ -33,27 +35,6 @@ Interpret intent, not only exact wording:
 - "Integrate it", "Everything is green, finish it" -> Finalize.
 - "Release", "Publish", "Bump the version" -> Release.
 - "What do we do now?" -> use `skills/next-task/SKILL.md`.
-
-## State discipline
-
-The working state is one of:
-
-```text
-Initial | Exploring | Proposing | Implementing | Refactoring | Finalizing | Releasing
-```
-
-Infer it from the user's instruction, current changes, active proposal,
-and recent validation evidence. Do not create a state file solely to
-track this value.
-
-- Finish or explicitly suspend current work before selecting unrelated work.
-- A return from Implement to Propose is normal when the expected
-  behavior needs correction or clarification.
-- Never silently weaken a scenario to make an implementation pass.
-- Never move a candidate specification into `docs/features/` before
-  Finalize.
-- Never publish, tag, or bump a release version without explicit
-  release intent.
 
 ## Explore
 
@@ -134,7 +115,10 @@ tree and file system are clean.
 
 A finalized change does not automatically cause a release. Ask whether
 a release is wanted. Run the release procedure only after an explicit
-user decision.
+user decision. The release procedure starts by checking the Refactor
+arbitration recorded in the Finalize report: a delta that accumulated
+refactoring-worthy debt without a Refactor phase goes back to Refactor
+before versioning.
 
 Use `skills/release/SKILL.md` and
 [`release_procedure.md`](release_procedure.md).

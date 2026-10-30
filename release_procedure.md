@@ -37,6 +37,24 @@ until the owner explicitly asks for a release. The release skill
 - [9. Publish to Alire](#9-publish-to-alire)
 - [10. Return to development mode](#10-return-to-development-mode)
 
+In the shared lifecycle, Release follows Finalize and never starts
+automatically: a finalized change stays on the development version
+until the owner explicitly asks for a release. The release skill
+(`skills/release/SKILL.md`) only drives the steps below.
+
+```mermaid
+flowchart LR
+    A[1. Release prerequisites] --> B[2. Select the release version]
+    B --> C[3. Set the release version]
+    C --> D[4. Close the changelog section]
+    D --> E[5. Validate locally]
+    E --> F[6. Confirm and commit]
+    F --> G[7. Validate on GitHub]
+    G --> H[8. Tag and publish the GitHub release]
+    H --> I[9. Publish to Alire]
+    I --> J[10. Return to development mode]
+```
+
 ## Parameters
 
 Every step below refers to the project's parameter table, which fixes:
@@ -62,6 +80,11 @@ changelog describes.
 Before starting the release procedure, verify that:
 
 - the intended development work is complete;
+- the released delta has had its Refactor arbitration: the Finalize
+  report records whether a Refactor phase was run or explicitly
+  dismissed for the accumulated changes; when the delta accumulated
+  refactoring-worthy debt without a Refactor phase, return to the
+  Refactor phase before versioning;
 - the current development changelog section is complete and accurate;
 - all development changes have been reviewed, committed and pushed;
 - the working tree is clean, on the file system and not only through
