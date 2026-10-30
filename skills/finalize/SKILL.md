@@ -56,4 +56,7 @@ Use when the user asks to integrate, finish, close, or finalize completed green 
 
 ## Output
 
-A finalization report listing integrated specifications, closed or updated indexes, validation evidence, and release readiness.
+A finalization report listing integrated specifications, closed or
+updated indexes, validation evidence, the Refactor arbitration for the
+completed work (phase run, or explicitly dismissed and why), and
+release readiness.
