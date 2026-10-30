@@ -8,6 +8,16 @@ description: >-
 
 # Skill: propose
 
+## Contents <!-- omit from toc -->
+
+- [Purpose](#purpose)
+- [Trigger](#trigger)
+- [Required companion skill](#required-companion-skill)
+- [Load](#load)
+- [Procedure](#procedure)
+- [Rules](#rules)
+- [Output](#output)
+
 ## Purpose
 
 Turn a sufficiently understood need into a candidate specification under `docs/proposed/`.

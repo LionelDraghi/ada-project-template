@@ -1,4 +1,4 @@
-# Roadmap
+# Roadmap <!-- omit from toc -->
 
 This is a lightweight index of intentional future development. Details remain in the linked source.
 

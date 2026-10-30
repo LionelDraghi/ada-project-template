@@ -1,4 +1,4 @@
-# Design discussions
+# Design discussions <!-- omit from toc -->
 
 This document records structural choices, alternatives, rationale, and
 status. It does not duplicate behavioral specifications. An open
@@ -15,6 +15,7 @@ Statuses: Discussing | Accepted | Rejected | Superseded.
 
 Copy this block for each new discussion, as a `###` section.
 
+```markdown
 ### <title>
 
 Status: Discussing
@@ -48,3 +49,4 @@ Related: <proposal, concern, issue, or feature>
 ## Consequences
 
 - ...
+```

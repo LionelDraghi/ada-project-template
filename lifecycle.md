@@ -1,4 +1,4 @@
-# Shared development lifecycle
+# Shared development lifecycle <!-- omit from toc -->
 
 This file details the shared lifecycle sketched in
 [`AGENTS.md`](AGENTS.md): the phases, the skill to load in each, and
@@ -10,6 +10,17 @@ tree is given in the
 the documentation structure — responsibilities, naming conventions,
 proposal lifecycle, concerns, roadmap and design discussions — is
 detailed in [`documentation_structure.md`](documentation_structure.md).
+
+## Contents <!-- omit from toc -->
+
+- [Entering a phase](#entering-a-phase)
+- [State discipline](#state-discipline)
+- [Explore](#explore)
+- [Propose](#propose)
+- [Implement](#implement)
+- [Refactor](#refactor)
+- [Finalize](#finalize)
+- [Release](#release)
 
 ## Entering a phase
 

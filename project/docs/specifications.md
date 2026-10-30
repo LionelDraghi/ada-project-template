@@ -1,4 +1,4 @@
-# <project-name> specifications
+# <project-name> specifications <!-- omit from toc -->
 
 This document holds the project's cross-feature specifications and the
 index of the feature pages. The feature pages own every detail; this

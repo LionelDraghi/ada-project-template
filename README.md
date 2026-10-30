@@ -1,7 +1,16 @@
-# ada-project-template
+# ada-project-template <!-- omit from toc -->
 
 Shared reference repository for Lionel's Ada projects (bbt, smk,
 ArchiCheck, TopoProof, and the next ones).
+
+## Contents <!-- omit from toc -->
+
+- [Design principles](#design-principles)
+- [Shared lifecycle](#shared-lifecycle)
+- [Repository contents](#repository-contents)
+- [Standard project tree](#standard-project-tree)
+- [How the projects use it](#how-the-projects-use-it)
+- [Skills](#skills)
 
 ## Design principles
 

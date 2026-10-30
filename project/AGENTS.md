@@ -1,8 +1,16 @@
-# Project instructions
+# Project instructions <!-- omit from toc -->
 
 The shared instructions in [`ada-project-template/AGENTS.md`](https://github.com/LionelDraghi/ada-project-template/blob/main/AGENTS.md) apply in full.
 
 **Read them immediately, before any other reading or any action.**
+
+## Contents <!-- omit from toc -->
+
+- [Project identity](#project-identity)
+- [Enabled capabilities](#enabled-capabilities)
+- [Project commands](#project-commands)
+- [Project-specific paths or release parameters](#project-specific-paths-or-release-parameters)
+- [Exceptions](#exceptions)
 
 ## Project identity
 

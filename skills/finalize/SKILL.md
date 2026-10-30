@@ -8,6 +8,15 @@ description: >-
 
 # Skill: finalize
 
+## Contents <!-- omit from toc -->
+
+- [Purpose](#purpose)
+- [Trigger](#trigger)
+- [Load](#load)
+- [Procedure](#procedure)
+- [Rules](#rules)
+- [Output](#output)
+
 ## Purpose
 
 Turn successfully implemented work into integrated, durable project state.

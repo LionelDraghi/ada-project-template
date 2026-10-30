@@ -1,4 +1,4 @@
-# Development workflow
+# Development workflow <!-- omit from toc -->
 
 This project follows the shared lifecycle — Explore, Propose,
 Implement, Refactor, Finalize, Release — defined in the reference

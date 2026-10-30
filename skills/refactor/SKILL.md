@@ -21,6 +21,24 @@ The non-negotiable rule is:
 Refactor first in a separate, verifiable step, or let the refactoring enable a
 later behaviour change.
 
+## Contents <!-- omit from toc -->
+
+- [Operating principles](#operating-principles)
+- [Tooling](#tooling)
+- [Workflow](#workflow)
+- [Bad-smell catalog](#bad-smell-catalog)
+  - [Within a subprogram](#within-a-subprogram)
+  - [Within a type or package abstraction](#within-a-type-or-package-abstraction)
+  - [Across units and system boundaries](#across-units-and-system-boundaries)
+  - [Ada and SPARK-specific signals](#ada-and-spark-specific-signals)
+- [Detection methods](#detection-methods)
+  - [Structural reading](#structural-reading)
+  - [Change analysis](#change-analysis)
+  - [Tools and textual signals](#tools-and-textual-signals)
+  - [Metric entry points with gnatmetric](#metric-entry-points-with-gnatmetric)
+  - [SPARK proof signals](#spark-proof-signals)
+- [Constraints in Lionel's projects](#constraints-in-lionels-projects)
+
 ## Operating principles
 
 Catalog entries are heuristics, not automatic violations.

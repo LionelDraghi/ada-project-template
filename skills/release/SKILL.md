@@ -8,6 +8,14 @@ description: >-
 
 # Skill: release
 
+## Contents <!-- omit from toc -->
+
+- [Purpose](#purpose)
+- [Trigger](#trigger)
+- [Load](#load)
+- [Procedure](#procedure)
+- [Output](#output)
+
 ## Purpose
 
 Execute the shared release procedure using project-specific parameters.

@@ -8,6 +8,16 @@ description: >-
 
 # Skill: implement
 
+## Contents <!-- omit from toc -->
+
+- [Purpose](#purpose)
+- [Trigger](#trigger)
+- [Load](#load)
+- [Procedure](#procedure)
+- [Rules](#rules)
+- [Verification responsibilities](#verification-responsibilities)
+- [Output](#output)
+
 ## Purpose
 
 Make the code satisfy an accepted candidate specification or an unambiguous corrective task.

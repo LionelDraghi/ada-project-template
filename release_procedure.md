@@ -23,6 +23,20 @@ automatically: a finalized change stays on the development version
 until the owner explicitly asks for a release. The release skill
 (`skills/release/SKILL.md`) only drives the steps below.
 
+## Contents <!-- omit from toc -->
+
+- [Parameters](#parameters)
+- [1. Release prerequisites](#1-release-prerequisites)
+- [2. Select the release version](#2-select-the-release-version)
+- [3. Set the release version](#3-set-the-release-version)
+- [4. Close the release changelog section](#4-close-the-release-changelog-section)
+- [5. Validate the release locally](#5-validate-the-release-locally)
+- [6. Confirm and commit the release state](#6-confirm-and-commit-the-release-state)
+- [7. Validate the release commit on GitHub](#7-validate-the-release-commit-on-github)
+- [8. Tag and publish the GitHub release](#8-tag-and-publish-the-github-release)
+- [9. Publish to Alire](#9-publish-to-alire)
+- [10. Return to development mode](#10-return-to-development-mode)
+
 ## Parameters
 
 Every step below refers to the project's parameter table, which fixes:

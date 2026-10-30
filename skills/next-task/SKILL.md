@@ -8,6 +8,15 @@ description: >-
 
 # Skill: next task
 
+## Contents <!-- omit from toc -->
+
+- [Purpose](#purpose)
+- [Trigger](#trigger)
+- [Procedure](#procedure)
+  - [A. Determine whether work is active](#a-determine-whether-work-is-active)
+  - [B. Initial state](#b-initial-state)
+- [Rules](#rules)
+
 ## Purpose
 
 Answer “What do we do now?” without losing active work or mixing concerns and roadmap additions.

@@ -1,4 +1,4 @@
-# Changelog
+# Changelog <!-- omit from toc -->
 
 All notable changes to this project are documented in this file,
 following [Keep a Changelog](https://keepachangelog.com/) conventions.
