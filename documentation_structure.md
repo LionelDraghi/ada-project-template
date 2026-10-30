@@ -1,4 +1,4 @@
-# Shared documentation structure
+# Shared documentation structure <!-- omit from toc -->
 
 ## 1. Standard tree
 
@@ -144,3 +144,27 @@ One-shot notes for existing projects adopting this structure:
   rename or merge them at the next Finalize;
 - `docs/dev/design_discussions.md` is already the name in use in the
   existing projects: no migration is needed.
+
+## 10. Tables of contents
+
+Long documents — roughly more than a screen of sections — carry a
+table of contents, in the TopoProof style: a real section, excluded
+from the rendered TOC, listing the `##` and `###` headings
+(subsections indented):
+
+```markdown
+## Contents <!-- omit from toc -->
+
+- [Section](#section)
+  - [Subsection](#subsection)
+```
+
+It is placed after the introduction, before the first content
+heading. Headings that must not appear in a rendered table of
+contents are tagged inline with `<!-- omit from toc -->`
+(mkdocs-material syntax), as in bbt's feature pages. Every document
+carries that tag on its first title:
+
+```markdown
+# Document title <!-- omit from toc -->
+```

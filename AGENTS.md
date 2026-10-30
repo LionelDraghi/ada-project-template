@@ -1,4 +1,4 @@
-# Lionel's Ada project template — shared agent instructions
+# Lionel's Ada project template — shared agent instructions <!-- omit from toc -->
 
 This file is the shared instruction reference for Lionel's Ada projects
 (bbt, smk, ArchiCheck, TopoProof, and the next ones). It describes
@@ -12,6 +12,21 @@ what is specific to that project, starting from the ready-to-copy
 
 A local exception overrides a shared rule only when it is explicit and
 justified.
+
+## Contents <!-- omit from toc -->
+
+- [How to use this file](#how-to-use-this-file)
+- [Non-negotiable rules (shared)](#non-negotiable-rules-shared)
+- [Start of every session](#start-of-every-session)
+- [Local project configuration](#local-project-configuration)
+- [Shared lifecycle](#shared-lifecycle)
+- [Build pointers (shared)](#build-pointers-shared)
+- [Source file headers (shared)](#source-file-headers-shared)
+- [State and phase discipline](#state-and-phase-discipline)
+- [Reference policy (shared)](#reference-policy-shared)
+- [Semantic tools (shared)](#semantic-tools-shared)
+- [Skills (shared)](#skills-shared)
+- [Git discipline](#git-discipline)
 
 ## How to use this file
 
@@ -105,6 +120,29 @@ every phase relies on:
 
 A project deviates from these semantics only where the deviation is
 explicitly stated in its own `AGENTS.md`.
+
+## Source file headers (shared)
+
+Every hand-written source file — Ada units, `.gpr` project files,
+Makefiles, shell scripts, JavaScript, and other code assets — starts
+with the project banner carrying the two SPDX lines:
+
+```ada
+--  ----------------------------------------------------------------------------
+--  <project name> (<project url>)
+--  SPDX-License-Identifier: <license declared in alire.toml>
+--  SPDX-FileCopyrightText: <year>, <author>
+--  ----------------------------------------------------------------------------
+```
+
+- comment style follows the file type: `--` for Ada and `.gpr`, `#`
+  for Makefiles and shell, `//` for JavaScript;
+- the banner names the project;
+- the SPDX license identifier matches the license declared in the
+  project manifest;
+- in Ada, banner and comments use the two-space form (`--  text`):
+  the validation build profile enforces the comment format and the
+  79-column limit (`-gnatyc`, `-gnatym`).
 
 ## State and phase discipline
 
