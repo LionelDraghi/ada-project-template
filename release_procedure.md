@@ -43,6 +43,10 @@ until the owner explicitly asks for a release. The release skill
 (`skills/release/SKILL.md`) only drives the steps below.
 
 ```mermaid
+---
+config:
+  theme: base
+---
 flowchart LR
     A[1. Release prerequisites] --> B[2. Select the release version]
     B --> C[3. Set the release version]

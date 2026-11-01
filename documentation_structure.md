@@ -4,6 +4,7 @@
 
 ```text
 docs/
+├── README.md           the user-facing documentation index
 ├── changelog.md
 ├── roadmap.md
 ├── specifications.md
@@ -22,6 +23,15 @@ docs/
 A project may omit an inapplicable file, but must not invent a different name or location for the same responsibility without a documented exception. The reference repository holds this tree instantiated, with files at their final names and placeholders to fill in: copy it from [`project/`](project/) when creating a project. Generated reports keep their existing homes: `docs/tests_results/` for test results and badges, `docs/dev/fixme_index.md` for the fixme index. Other generated reports live under `docs/generated/` when practical, state their generator, and must not be hand-edited.
 
 ## 2. Responsibilities
+
+### `docs/README.md`
+
+The user-facing documentation index: a short description of each file
+and relative links to them, in the `docs/dev/README.md` style. Its
+introduction points to `docs/dev/README.md`, and that one points
+back: the two indexes route a lost reader to the right subtree. A
+project lists its user guide and its error codes here when it has
+them.
 
 ### `docs/features/`
 
@@ -63,7 +73,40 @@ Maintainer-facing documentation: the development workflow, release parameters, u
 
 Reproducible reports. Files in these directories state their generator and must not be hand-edited.
 
-## 3. Naming conventions
+## 3. The main README
+
+The main README is the routing page. Its structure:
+
+1. Title, with the `<!-- omit from toc -->` tag, preceded by three
+   badges: Made with Ada, with the Ada logo (pointing to
+   https://ada-lang.io/), the license badge, and the bbt test results
+   badge — a static zero-count badge in the skeleton, replaced by the
+   generated `docs/tests_results/badge.svg` after the first bbt run;
+2. one sentence stating what the project is and for whom, then one
+   paragraph stating the use case it serves — the boilerplate or
+   problem it removes;
+3. `## Documentation`, organized by role, in this order:
+   - *As a curious reader*: the roadmap (or the manifesto when the
+     project has one);
+   - *As a user*: its index, [`docs/README.md`](project/docs/README.md),
+     first, then the notable contents with direct links (user guide,
+     error codes, changelog);
+   - *As a developer*: its index, [`docs/dev/README.md`](project/docs/dev/README.md),
+     first — preceded by the contributing guide when the project has
+     one — then the notable contents with direct links (development
+     workflow, design discussions);
+4. `## How to get it`, before Build and test: the distribution
+   channel (Alire crate, release download, AppImage), or build from
+   source;
+5. `## Build and test`: the build and validation commands;
+6. `## Licence`.
+
+The two documentation indexes point to each other in their
+introductions, so a lost reader is routed to the right subtree. The
+skeleton lives in [`project/README.md`](project/README.md) and
+[`project/docs/README.md`](project/docs/README.md).
+
+## 4. Naming conventions
 
 - Use lowercase snake_case file names unless a repository has an established compatible convention.
 - Use concise descriptive names: `run_in_shell.md`, not `proposal_2026_10_28.md`.
@@ -73,16 +116,18 @@ Reproducible reports. Files in these directories state their generator and must 
   `docs/specifications.md`; never reuse a freed number.
 - Use relative Markdown links inside the repository.
 
-## 4. Proposal lifecycle
+## 5. Proposal lifecycle
 
-```text
-docs/proposed/<change>.md
-        |
-        | Implement + Refactor + Finalize
-        v
-merge into an existing docs/features/<area>.md
-        or
-create docs/features/<area>.md
+```mermaid
+---
+config:
+  theme: base
+---
+flowchart TB
+    P["docs/proposed/&lt;change&gt;.md"] -->|"Implement + Refactor + Finalize"| M
+    P --> C
+    M["merge into an existing<br/>docs/features/&lt;area&gt;.md"]
+    C["create docs/features/&lt;area&gt;.md"]
 ```
 
 A proposal is not always moved unchanged:
@@ -95,7 +140,7 @@ A proposal is not always moved unchanged:
 
 The source proposal is then removed. Git history preserves it.
 
-## 5. Concerns
+## 6. Concerns
 
 `docs/dev/concerns.md` is an index, not a duplicate issue tracker. Each row supplies priority, a short label, kind, authoritative link, and status.
 
@@ -109,13 +154,13 @@ Sources include:
 
 A closed concern is removed or marked closed according to the project's desired history policy. The authoritative source retains the details.
 
-## 6. Roadmap
+## 7. Roadmap
 
 `docs/roadmap.md` describes intentional future development. It points to proposals, discussions, or specifications. It does not contain low-level defect details.
 
 Priority concerns are considered before roadmap additions when choosing new work, unless the user chooses otherwise.
 
-## 7. Design discussions
+## 8. Design discussions
 
 `docs/dev/design_discussions.md` records structural choices, alternatives, rationale, and status.
 
@@ -127,11 +172,11 @@ Discussing | Accepted | Rejected | Superseded
 
 An open decision may be indexed as a concern when it blocks work or creates material risk.
 
-## 8. Changelog
+## 9. Changelog
 
 Use Semantic Versioning and Keep a Changelog conventions. Maintain an Unreleased section. Update it during Finalize when the change matters to users; do not bump a release version until Release.
 
-## 9. Migrations from existing projects
+## 10. Migrations from existing projects
 
 One-shot notes for existing projects adopting this structure:
 
@@ -145,7 +190,7 @@ One-shot notes for existing projects adopting this structure:
 - `docs/dev/design_discussions.md` is already the name in use in the
   existing projects: no migration is needed.
 
-## 10. Tables of contents
+## 11. Tables of contents
 
 Long documents — roughly more than a screen of sections — carry a
 table of contents, in the TopoProof style: a real section, excluded

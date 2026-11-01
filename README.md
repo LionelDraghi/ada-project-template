@@ -49,8 +49,9 @@ ada-project-template/
 │                                build pointers, state discipline, git
 │                                discipline, skills (details in annexes)
 ├── project/                     the project skeleton, ready to be copied
-│                                into a new project: AGENTS.md and the whole
-│                                docs/ tree, with files at their final names
+│                                into a new project: AGENTS.md, README.md
+│                                and the whole docs/ tree, with files at
+│                                their final names
 ├── documentation_structure.md   shared docs tree, responsibilities, naming,
 │                                proposal lifecycle, concerns, roadmap,
 │                                design decisions, changelog
@@ -75,6 +76,7 @@ final names and placeholders to fill in.
 │                        AppImage workflow, when the project ships an
 │                        executable; a library publishes no AppImage
 ├── docs/
+│   ├── README.md        the user-facing documentation index
 │   ├── changelog.md     the changelog
 │   ├── features/        the bbt scenario pages, the executable
 │                        documentation: a must-have
@@ -99,9 +101,9 @@ final names and placeholders to fill in.
 
 ## How the projects use it
 
-A new project starts by copying the `project/` skeleton: its `AGENTS.md`
-and the whole `docs/` tree are ready to duplicate as is, with files at
-their final names and placeholders to fill in.
+A new project starts by copying the `project/` skeleton: its `AGENTS.md`,
+`README.md` and the whole `docs/` tree are ready to duplicate as is,
+with files at their final names and placeholders to fill in.
 
 Each project's `AGENTS.md` references this repository on GitHub
 instead of duplicating it:
