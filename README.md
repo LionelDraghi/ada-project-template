@@ -82,9 +82,12 @@ final names and placeholders to fill in.
 │                        documentation: a must-have
 │   ├── proposed/        candidate changes awaiting implementation or
 │                        integration; see documentation_structure.md
-│   ├── tests_results/   the test results and badges, generated and
-│                        committed; the tests themselves are not
-│                        (necessarily) there
+│   ├── tests_results/   the test results and badges, per platform
+│                        and profile; local runs land in the same
+│                        profile directories, git-ignored for diff
+│                        only; the CI workflows commit the recorded
+│                        ones (git add -f); the tests themselves are
+│                        not there
 │   └── dev/
 │       ├── README.md              this directory's entry point
 │       ├── development_workflow.md

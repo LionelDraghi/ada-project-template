@@ -21,6 +21,8 @@ justified.
 - [Local project configuration](#local-project-configuration)
 - [Shared lifecycle](#shared-lifecycle)
 - [Build pointers (shared)](#build-pointers-shared)
+  - [Build profiles (shared)](#build-profiles-shared)
+  - [Test results (shared)](#test-results-shared)
 - [Source file headers (shared)](#source-file-headers-shared)
 - [State and phase discipline](#state-and-phase-discipline)
 - [Reference policy (shared)](#reference-policy-shared)
@@ -111,6 +113,62 @@ every phase relies on:
 A project deviates from these semantics only where the deviation is
 explicitly stated in its own `AGENTS.md`.
 
+### Build profiles (shared)
+
+The three Alire build profiles are objectives, not interchangeable
+switch presets. The root `.gpr` selects the compiler switches per
+profile — a `case` on the config project's `Build_Profile` variable —
+instead of one uniform list, and gives each profile its own object
+directory:
+
+- `development`: iterate fast towards the executable — fast
+  compilation, no optimization, no runtime assertions, but static
+  checks (style checks included) still on.
+- `validation`: find errors — every check embedded (assertions,
+  overflow, validity, stack), but no time-costly optimization. The
+  default and working profile: it backs `make build` and `make check`,
+  and is pinned in `alire.toml` under `[build-profiles]`.
+- `release`: deliver an optimized executable (`-O3`, `-gnatn`) —
+  runtime checks, assertions and style checks off.
+
+Keep the debug info in every profile: it costs nothing at run time.
+Each profile branch must be exercised at least once before being
+relied on; `make release` is that occasion for `release`.
+
+The profiles gate the shared workflow:
+
+- a push may take place only once the complete validation — build and
+  tests in validation mode — is green;
+- a release requires a full recompilation in release mode after a
+  complete clean, followed by a full replay of the tests on that
+  executable; only a green run unlocks the release.
+
+Two rules complete the profile semantics:
+
+- performance measurements are taken on release executables: on a
+  validation or instrumented build, they would measure the checks
+  and the instrumentation, not the code;
+- the Makefiles must be able to replay the test suite on any built
+  variant — validation, release or instrumented — indifferently:
+  the executable under test is a selection parameter, not a
+  constant.
+
+### Test results (shared)
+
+Every test run writes its generated results (JUnit XML, results
+indexes, badges) under a profile-suffixed results directory:
+
+- local runs write under `docs/tests_results/<platform>/<profile>/`
+  (`validation` for `make build` and `make check`, `release` for the
+  release chain). These directories are Git-ignored: they exist to be
+  platform and profile. The outputs are comparable; the run times are
+  not — two machines never agree. `make clean` removes them;
+- only CI runs are recorded: the CI workflows write their results and
+  badges to the same `<platform>/<profile>/` directories and stage
+  them by explicit `git add -f`, so that a local run can be diffed,
+  in the editor, against the last committed run at the same path. A
+  local run never feeds a committed result.
+
 ## Source file headers (shared)
 
 Every hand-written source file — Ada units, `.gpr` project files,
@@ -192,4 +250,6 @@ example `npx skills add LionelDraghi/ada-project-template`:
 - Do not discard user changes.
 - Make commits focused and explain intent.
 - Do not force-push, rewrite shared history, publish, or merge without explicit authorization.
+- Push only when the complete validation — build and tests in
+  validation mode — is green.
 - Generated changes must be reproducible from their source and command.

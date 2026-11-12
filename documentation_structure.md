@@ -20,7 +20,7 @@ docs/
     └── fixme_index.md
 ```
 
-A project may omit an inapplicable file, but must not invent a different name or location for the same responsibility without a documented exception. The reference repository holds this tree instantiated, with files at their final names and placeholders to fill in: copy it from [`project/`](project/) when creating a project. Generated reports keep their existing homes: `docs/tests_results/` for test results and badges, `docs/dev/fixme_index.md` for the fixme index. Other generated reports live under `docs/generated/` when practical, state their generator, and must not be hand-edited.
+A project may omit an inapplicable file, but must not invent a different name or location for the same responsibility without a documented exception. The reference repository holds this tree instantiated, with files at their final names and placeholders to fill in: copy it from [`project/`](project/) when creating a project. Generated reports keep their existing homes: `docs/tests_results/` for test results and badges, `docs/dev/fixme_index.md` for the fixme index. Other generated reports live under `docs/generated/` when practical, state their generator, and must not be hand-edited. Test results are organized per platform and per profile under `docs/tests_results/<platform>/<profile>/`; local runs land there too and are git-ignored, and the CI workflows stage the committed ones from the same paths with `git add -f` (cf. the shared AGENTS.md, *Test results*).
 
 ## 2. Responsibilities
 
@@ -81,7 +81,8 @@ The main README is the routing page. Its structure:
    badges: Made with Ada, with the Ada logo (pointing to
    https://ada-lang.io/), the license badge, and the bbt test results
    badge — a static zero-count badge in the skeleton, replaced by the
-   generated `docs/tests_results/badge.svg` after the first bbt run;
+   generated `docs/tests_results/<platform>/<profile>/badge.svg` after
+   the first CI run;
 2. one sentence stating what the project is and for whom, then one
    paragraph stating the use case it serves — the boilerplate or
    problem it removes;

@@ -47,16 +47,22 @@ until the owner explicitly asks for a release. The release skill
 config:
   theme: base
 ---
-flowchart LR
-    A[1. Release prerequisites] --> B[2. Select the release version]
-    B --> C[3. Set the release version]
-    C --> D[4. Close the changelog section]
-    D --> E[5. Validate locally]
-    E --> F[6. Confirm and commit]
-    F --> G[7. Validate on GitHub]
-    G --> H[8. Tag and publish the GitHub release]
-    H --> I[9. Publish to Alire]
-    I --> J[10. Return to development mode]
+flowchart TB
+    subgraph PG1 [Prepare]
+        A[1. Release prerequisites] --> B[2. Select the release version]
+        B --> C[3. Set the release version]
+        C --> D[4. Close the changelog section]
+    end
+    subgraph PG2 [Validate and commit]
+        E[5. Validate locally] --> F[6. Confirm and commit]
+        F --> G[7. Validate on GitHub]
+    end
+    subgraph PG3 [Publish]
+        H[8. Tag and publish the GitHub release] --> I[9. Publish to Alire]
+    end
+    PG1 --> E
+    PG2 --> H
+    PG3 --> J[10. Return to development mode]
 ```
 
 ## Parameters
@@ -205,8 +211,16 @@ Run the complete local validation. If any part fails:
 4. restart release validation from a clean state.
 
 Verify that the version-check command reports the confirmed release
-version exactly, without the `-dev` suffix, and that the release-mode
-build works when the project has one.
+version exactly, without the `-dev` suffix.
+
+When the project has a release-mode build, a release executable is
+validated, not just built: perform a complete clean, a full build in
+release mode, then a full replay of the tests on that executable. Its
+results land under `docs/tests_results/<platform>/release/` (the local,
+Git-ignored per-profile results directory), where they can be diffed
+against the last committed run. The release proceeds only if this run
+is green; if it fails, stop and handle the failure through the normal
+development workflow.
 
 Then clean the repository and inspect both Git state and the file
 system:

@@ -2,8 +2,8 @@
 
 [![image](https://img.shields.io/badge/-inside-blue?logo=ada&logoColor=white&labelColor=grey&logoSize=auto&style=flat-square)](https://ada-lang.io/)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg?style=flat-square)](https://opensource.org/licenses/Apache-2.0)
-[![bbt](https://img.shields.io/badge/bbt-0_tests_passed_|_0_failed_|_0_empty-blue.svg?style=flat-square)](docs/tests_results/test_results.md)
-<!-- replaced by the generated docs/tests_results/badge.svg after the first bbt run -->
+[![bbt <platform>](https://img.shields.io/badge/bbt-0_tests_passed_|_0_failed_|_0_empty-blue.svg?style=flat-square)](docs/tests_results/<platform>/validation/test_results.md)
+<!-- one badge per platform -->
 
 <One sentence: what the project is, for whom.>
 
@@ -45,6 +45,7 @@ make build
 ```sh
 make build   # build
 make check   # build + bbt executable documentation
+make release # clean + release build + full test replay on the release executable
 ```
 
 ## Licence

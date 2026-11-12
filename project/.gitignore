@@ -1,0 +1,5 @@
+# Local test results, all profiles (cf. AGENTS.md, Test results):
+# local runs are never committed — they exist to be diffed against the
+# last committed run. CI runs are staged by the workflows with
+# explicit git add -f.
+docs/tests_results/*/*/

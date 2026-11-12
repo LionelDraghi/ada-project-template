@@ -9,7 +9,7 @@ project-specific additions; read both documents together.
 |---|---|
 | Changelog file | `docs/changelog.md` |
 | Validation command | `make check` |
-| Release-mode build | `make release` |
+| Release chain | `make release` (clean, release build, full test replay) |
 | Remote | `origin` |
 | Release branch | `main` |
 | Required CI checks | `<workflows, or none>` |
