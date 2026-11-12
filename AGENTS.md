@@ -50,6 +50,11 @@ and the project skeleton are in the
   reviewed. It may come in a later message. A request in the task
   ("let's push this") states the goal, not the consent. When in doubt,
   wait.
+- The index belongs to the owner. The owner works on the files at the
+  same time as the agent: if a file is modified, the owner made the
+  change; if it is staged, the owner approved it. An agent never
+  overwrites such a file on the grounds that it did not make the
+  changes itself, and never resets the index.
 - An explicit "go" for commit or push approves all remaining modified
   files as well.
 - If a build, test, documentation, cleanup or publication step fails,
