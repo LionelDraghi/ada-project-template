@@ -50,6 +50,13 @@ and the project skeleton are in the
   reviewed. It may come in a later message. A request in the task
   ("let's push this") states the goal, not the consent. When in doubt,
   wait.
+- Never publish or send anything in the owner's name — issue, pull
+  request or discussion comments, release notes, mails to maintainers
+  or reviewers, social network posts — without the owner's prior
+  review of the exact content or an explicit approval of that content.
+  An instruction to answer or publish ("post a reply", "answer the
+  issue") states the goal, not the consent: present the draft, and
+  wait for the approval, like for a commit. When in doubt, wait.
 - The index belongs to the owner. The owner works on the files at the
   same time as the agent: if a file is modified, the owner made the
   change; if it is staged, the owner approved it. An agent never
